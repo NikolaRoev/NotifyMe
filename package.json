@@ -1,0 +1,33 @@
+{
+  "scripts": {
+    "update-dependencies": "ncu -u",
+    "lint": "tsc && eslint . --ext .ts",
+    "build:chrome": "vite build --mode chrome",
+    "build:firefox": "vite build --mode firefox",
+    "package:chrome": "npm run build:chrome && cd dist/chrome && bestzip ../../extension-chrome.zip *",
+    "package:firefox": "npm run build:firefox && web-ext lint -s dist/firefox && web-ext build -s dist/firefox -a . -n extension-firefox.zip -o",
+    "unit-tests": "vitest run",
+    "unit-tests:coverage": "vitest run --coverage",
+    "integration-tests": "cross-env NOTIFYME_TESTING=1 npm run build:chrome && cross-env PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS=1 npx playwright test"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.37.1",
+    "@types/chrome": "0.0.245",
+    "@types/wicg-file-system-access": "^2020.9.6",
+    "@types/xml2js": "^0.4.12",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "@vitest/coverage-v8": "^0.34.3",
+    "bestzip": "^2.2.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.48.0",
+    "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-import": "^2.28.1",
+    "sass": "^1.66.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.3",
+    "xml2js": "^0.6.2"
+  }
+}

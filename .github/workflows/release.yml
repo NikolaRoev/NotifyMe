@@ -1,0 +1,30 @@
+name: Release
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version
+        required: true
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  release:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ needs.test.result }} == success
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run package:chrome
+      - run: npm install web-ext && npm run package:firefox
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const { createRelease } = await import("${{ github.workspace }}/.github/workflows/create-release.js");
+            await createRelease({ github, context }, "${{ github.event.inputs.version }}");
