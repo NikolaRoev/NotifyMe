@@ -146,7 +146,7 @@ export class RSSFeedsManager implements BaseFeedsManager {
             throw new Error(`[${response.status}] ${data}`);
         }
 
-        if (!/<rss .*?version="2\.0"/.test(data)) {
+        if (!/<rss .*?version="2\.0".*?>.*<\/rss>/gs.test(data)) {
             throw new Error("Invalid RSS feed");
         }
 
