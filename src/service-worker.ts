@@ -81,7 +81,7 @@ chrome.runtime.onMessage.addListener((message : Message, _, sendResponse) => {
             break;
         }
         case "ImportFeeds":
-            Application.importFeeds(message.feedsObject)
+            Application.importFeeds(message.combinedFeedsObject)
                 .then(() => { sendResponse(); })
                 .catch((reason) => { console.error(`Failed to ${message.type}: ${reason}.`); });
             break;

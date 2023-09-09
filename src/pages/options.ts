@@ -248,7 +248,7 @@ exportFeedsButton.addEventListener("click", () => {
     };
     createExportFile().catch((reason: Error) => {
         if (reason.name !== "AbortError") {
-            const message = `Failed to import feeds: ${reason}.`;
+            const message = `Failed to export feeds: ${reason}.`;
             console.error(message);
             alert(message);
         }
@@ -276,7 +276,7 @@ importFeedsButton.addEventListener("click", () => {
         if (contents) {
             const message: Message = {
                 type: "ImportFeeds",
-                feedsObject: JSON.parse(contents) as { [Key in FeedSource]: Feeds }
+                combinedFeedsObject: JSON.parse(contents) as { [Key in FeedSource]: Feeds }
             };
             await chrome.runtime.sendMessage(message);
         }

@@ -116,8 +116,8 @@ export async function update() {
     }
 }
 
-export async function importFeeds(feedsObject: { [Key in FeedSource]: Feeds }): Promise<void> {
+export async function importFeeds(combinedFeedsObject: { [Key in FeedSource]: Feeds }): Promise<void> {
     for (const source of Object.values(FeedSource)) {
-        await Storage.set(source, feedsObject[source]);
+        await Storage.set(source, combinedFeedsObject[source]);
     }
 }

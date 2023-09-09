@@ -10,4 +10,4 @@ export type Message =
     { type: "GetUnreadPosts" } |
     { type: "ReadPosts", open: boolean, id?: string } |
     { type: "Update" } |
-    { type: "ImportFeeds", feedsObject: { [Key in FeedSource]: Feeds } }
+    { type: "ImportFeeds", combinedFeedsObject: { [Key in FeedSource]: Feeds } }

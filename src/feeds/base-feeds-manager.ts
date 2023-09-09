@@ -65,7 +65,7 @@ export abstract class BaseFeedsManager {
     abstract update(feeds: Feeds): Promise<Post[]>;
 
     /**
-     * Modifies `unreadPosts`. If `id` is set remove that post and return.
+     * Modifies `unreadPosts`. If `id` is set remove that post and return it.
      * Otherwise extract all posts and return them.
      * 
      * @param unreadPosts The stored unread posts.
