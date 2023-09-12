@@ -34,7 +34,6 @@ export const manifest: Manifest = {
         "alarms",
         "notifications",
         "storage",
-        "tabs",
         "unlimitedStorage"
     ],
     

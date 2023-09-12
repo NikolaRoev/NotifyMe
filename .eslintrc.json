@@ -41,7 +41,7 @@
     "no-return-assign": "warn",
     "no-return-await": "warn",
     "no-sequences": "warn",
-    "no-unused-expressions": ["warn", {"allowTernary": true}],
+    "no-unused-expressions": "warn",
     "no-var": "warn",
     "no-void": "warn",
     "prefer-const": "warn",
