@@ -1,5 +1,3 @@
-# NotifyMe
-
 ## Download
 [Chrome](https://chrome.google.com/webstore/detail/notifyme/laaeecgehcplhkjpodmbhpjcdendfklk) / [Firefox](https://addons.mozilla.org/en-US/firefox/addon/nikolaroev-notifyme/)
 
