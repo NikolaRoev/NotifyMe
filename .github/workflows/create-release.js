@@ -1,4 +1,5 @@
-import { promises as fs } from 'fs';
+/* eslint-disable camelcase */
+import { promises as fs } from "fs";
 
 export async function createRelease({ github, context }, version) {
     await github.rest.git.createRef({
@@ -6,14 +7,14 @@ export async function createRelease({ github, context }, version) {
         repo: context.repo.repo,
         ref: `refs/tags/${version}`,
         sha: context.sha
-    })
-        
+    });
+    
     const { data } = await github.rest.repos.createRelease({
         owner: context.repo.owner,
         repo: context.repo.repo,
         tag_name: `${version}`
     });
-        
+    
     await github.rest.repos.uploadReleaseAsset({
         owner: context.repo.owner,
         repo: context.repo.repo,
