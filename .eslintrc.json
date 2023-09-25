@@ -5,20 +5,15 @@
     "commonjs": true,
     "es2022": true
   },
+  "ignorePatterns": ["node_modules", "dist", "!.*"],
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/strict-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked"
+    "eslint:recommended"
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json",
-    "tsconfigRootDir": "."
+    "sourceType": "module"
   },
   "rules": {
     // Overrides.
-    "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/restrict-template-expressions": "off",
     "no-empty-pattern": ["error", { "allowObjectPatternsAsParameters": true }],
 
     // Possible Problems.
@@ -66,10 +61,30 @@
     "semi": "error",
     "switch-colon-spacing": "warn"
   },
-  "settings": {
-    "import/resolver": {
-      "typescript": true,
-      "node": true
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json",
+        "tsconfigRootDir": "."
+      },
+      "rules": {
+        // Overrides.
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+      },
+      "settings": {
+        "import/resolver": {
+          "typescript": true,
+          "node": true
+        }
+      }
     }
-  }
+  ]
 }
