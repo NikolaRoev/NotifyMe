@@ -13,7 +13,7 @@ export type Post = {
     title: string,
     url: string,
     source: string,
-    created: number,
+    created: number
 }
 
 export type FeedData =
