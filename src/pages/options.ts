@@ -1,20 +1,12 @@
+import "../../utility/tabs";
 import { FeedSource, type Feeds } from "../feeds/base-feeds-manager";
 import type { Message } from "../message";
 import type { RSSFeeds } from "../feeds/rss-feeds-manager";
 import type { RedditFeeds } from "../feeds/reddit-feeds-manager";
 import type { Result } from "../../utility/result";
 import type { Settings } from "../settings";
-import { createConfirmButton } from "../../utility/confirm-button";
+import { makeConfirmButton } from "../../utility/confirm-button";
 
-
-
-const redditTabButton = document.getElementById("reddit-tab-button") as HTMLButtonElement;
-const rssTabButton = document.getElementById("rss-tab-button") as HTMLButtonElement;
-const settingsTabButton = document.getElementById("settings-tab-button") as HTMLButtonElement;
-
-const redditTab = document.getElementById("reddit-tab") as HTMLDivElement;
-const rssTab = document.getElementById("rss-tab") as HTMLDivElement;
-const settingsTab = document.getElementById("settings-tab") as HTMLDivElement;
 
 
 const redditAddForm = document.getElementById("reddit-add-form") as HTMLFormElement;
@@ -81,7 +73,8 @@ function updateRedditFeeds() {
                     const button = document.createElement("button");
                     button.innerHTML = "<img src=\"/icons/trash.svg\">";
                     button.title = `Remove ${user}`;
-                    createConfirmButton(button, () => {
+                    makeConfirmButton(button, "<img src=\"/icons/x-circle.svg\">");
+                    button.addEventListener("click", () => {
                         const message: Message = {
                             type: "RemoveFeed",
                             feedData: {
@@ -96,9 +89,7 @@ function updateRedditFeeds() {
                             }
                             updateRedditFeeds();
                         }).catch((reason) => { console.error(`Failed to remove Reddit feed: ${reason}.`); });
-    
-                        
-                    }, "<img src=\"/icons/x-circle.svg\">");
+                    });
                     userContainer.appendChild(button);
     
                     usersList.appendChild(userContainer);
@@ -128,7 +119,8 @@ function updateRssFeeds() {
                 const button = document.createElement("button");
                 button.innerHTML = "<img src=\"/icons/trash.svg\">";
                 button.title = `Remove ${feed.name}`;
-                createConfirmButton(button, () => {
+                makeConfirmButton(button, "<img src=\"/icons/x-circle.svg\">");
+                button.addEventListener("click", () => {
                     const message: Message = {
                         type: "RemoveFeed",
                         feedData: {
@@ -142,7 +134,7 @@ function updateRssFeeds() {
                         }
                         updateRssFeeds();
                     }).catch((reason) => { console.error(`Failed to remove RSS feed: ${reason}.`); });
-                }, "<img src=\"/icons/x-circle.svg\">");
+                });
                 container.appendChild(button);
     
                 rssFeedsList.appendChild(container);
@@ -294,36 +286,6 @@ importFeedsButton.addEventListener("click", () => {
     });
 });
 
-
-redditTabButton.addEventListener("click", () => {
-    redditTabButton.classList.add("active");
-    rssTabButton.classList.remove("active");
-    settingsTabButton.classList.remove("active");
-
-    redditTab.classList.remove("hidden");
-    rssTab.classList.add("hidden");
-    settingsTab.classList.add("hidden");
-});
-
-rssTabButton.addEventListener("click", () => {
-    rssTabButton.classList.add("active");
-    redditTabButton.classList.remove("active");
-    settingsTabButton.classList.remove("active");
-
-    rssTab.classList.remove("hidden");
-    redditTab.classList.add("hidden");
-    settingsTab.classList.add("hidden");
-});
-
-settingsTabButton.addEventListener("click", () => {
-    settingsTabButton.classList.add("active");
-    redditTabButton.classList.remove("active");
-    rssTabButton.classList.remove("active");
-
-    settingsTab.classList.remove("hidden");
-    redditTab.classList.add("hidden");
-    rssTab.classList.add("hidden");
-});
 
 
 updateRedditFeeds();

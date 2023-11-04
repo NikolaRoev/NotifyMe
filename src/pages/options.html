@@ -14,10 +14,10 @@
 
     <div class="contents">
 
-      <div class="nav-container">
-        <button class="tab-button active" id="reddit-tab-button" type="button" role="tab">Reddit</button>
-        <button class="tab-button" id="rss-tab-button" type="button" role="tab">RSS</button>
-        <button class="tab-button" id="settings-tab-button" type="button" role="tab">Settings</button>
+      <div class="tab-bar">
+        <button class="tab-button active" id="reddit-tab-button" type="button" role="tab" data-tab-page-id="reddit-tab">Reddit</button>
+        <button class="tab-button" id="rss-tab-button" type="button" role="tab" data-tab-page-id="rss-tab">RSS</button>
+        <button class="tab-button" id="settings-tab-button" type="button" role="tab" data-tab-page-id="settings-tab">Settings</button>
       </div>
 
       <!-- Reddit Tab -->
@@ -37,7 +37,7 @@
       <!-- Reddit Tab END -->
 
       <!-- RSS Tab -->
-      <div class="tab hidden" id="rss-tab">
+      <div class="tab" id="rss-tab">
 
         <form id="rss-add-form" action="">
           <label for="feed-input">Feed:</label>
@@ -51,7 +51,7 @@
       <!-- RSS Tab END -->
 
       <!-- Settings Pane -->
-      <div class="tab hidden" id="settings-tab">
+      <div class="tab" id="settings-tab">
 
         <form id="settings-form" action="">
           <div>

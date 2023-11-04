@@ -3,6 +3,7 @@
 ## Unreleased
 ### Added:
 ### Changed:
+- Reduced UI code.
 ### Deprecated:
 ### Removed:
 ### Fixed:
