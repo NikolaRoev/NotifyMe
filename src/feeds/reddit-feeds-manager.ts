@@ -1,40 +1,25 @@
 import { BaseFeedsManager, FeedSource, type Post } from "./base-feeds-manager";
 import { wait } from "../../utility/wait";
+import { z } from "zod";
 
 
 
-type SubmissionJsonObject = {
-    data: {
-        title: string,
-        name: string,
-        author: string,
-        url: string,
-        created: number
-    }
-}
+const submissionJsonObject = z.object({
+    data: z.object({
+        title: z.string(),
+        name: z.string(),
+        author: z.string(),
+        url: z.string(),
+        created: z.number()
+    })
+});
+type SubmissionJsonObject = z.infer<typeof submissionJsonObject>;
 
-type RedditJsonObject = {
-    data: {
-        children: SubmissionJsonObject[]
-    }
-}
-
-function isSubmissionJsonObject(obj: unknown): obj is SubmissionJsonObject {
-    return typeof obj === "object" && obj !== null &&
-           "data" in obj && typeof obj.data === "object" && obj.data !== null &&
-           "title" in obj.data && typeof obj.data.title === "string" &&
-           "name" in obj.data && typeof obj.data.name === "string" &&
-           "author" in obj.data && typeof obj.data.author === "string" &&
-           "url" in obj.data && typeof obj.data.url === "string" &&
-           "created" in obj.data && typeof obj.data.created === "number";
-}
-
-function isRedditJsonObject(obj: unknown): obj is RedditJsonObject {
-    return typeof obj === "object" && obj !== null &&
-           "data" in obj && typeof obj.data === "object" && obj.data !== null &&
-           "children" in obj.data && obj.data.children !== null &&
-           Array.isArray(obj.data.children) && obj.data.children.every((item) => isSubmissionJsonObject(item));
-}
+const redditJsonObject = z.object({
+    data: z.object({
+        children: submissionJsonObject.array()
+    })
+});
 
 
 export type RedditFeedData = {
@@ -191,10 +176,11 @@ export class RedditFeedsManager implements BaseFeedsManager {
             throw new Error(`[${response.status}] ${JSON.stringify(json)}`);
         }
 
-        if (!isRedditJsonObject(json)) {
+        const result = redditJsonObject.safeParse(json);
+        if (!result.success) {
             throw new Error(`Unexpected response JSON: ${JSON.stringify(json)}`);
         }
 
-        return json.data.children;
+        return result.data.data.children;
     }
 }

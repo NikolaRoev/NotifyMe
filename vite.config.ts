@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
-import makeInfoPlugin from "./utility/make-info-plugin";
 import makeManifestPlugin from "./utility/make-manifest-plugin";
 import { manifest } from "./manifest";
+import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 
 
@@ -9,20 +9,18 @@ import { resolve } from "path";
 export default defineConfig(({ mode }) => ({
     envDir: __dirname,
     plugins: [
-        makeManifestPlugin(manifest, mode),
-        makeInfoPlugin({
-            version: manifest.version,
-            url: "https://github.com/NikolaRoev/NotifyMe"
-        })
+        react(),
+        makeManifestPlugin(manifest, mode)
     ],
     define: {
-        "__UPDATE_PERIOD__": process.env.NOTIFYME_TESTING ? 0 : 15
+        __VERSION__: JSON.stringify(manifest.version),
+        __UPDATE_PERIOD__: process.env.NOTIFYME_TESTING ? 0 : 15
     },
     root: resolve(__dirname, "src", "pages"),
     publicDir: resolve(__dirname, "public"),
     build: {
         emptyOutDir: true,
-        sourcemap: "inline",
+        sourcemap: true,
         rollupOptions: {
             input: {
                 "service-worker": resolve(__dirname, "src", "service-worker.ts"),

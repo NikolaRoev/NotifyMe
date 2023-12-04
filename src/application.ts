@@ -4,7 +4,7 @@ import { Err, Ok, type Result } from "../utility/result";
 import { type Settings, defaultSettings } from "./settings";
 import { RSSFeedsManager } from "./feeds/rss-feeds-manager";
 import { RedditFeedsManager } from "./feeds/reddit-feeds-manager";
-import { relativeTime } from "../utility/relative-time";
+import { formatDistanceToNowStrict } from "date-fns";
 
 
 
@@ -106,7 +106,7 @@ export async function update() {
     for (const post of newPosts) {
         chrome.notifications.create(post.id,
             {
-                message: `${post.source}\n${relativeTime(post.created)}`,
+                message: `${post.source}\n${formatDistanceToNowStrict(post.created, { addSuffix: true })}`,
                 iconUrl: "/icons/icon-128.png",
                 title: post.title,
                 type: "basic",

@@ -1,77 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Options</title>
-    <script src="./options.ts" type="module"></script>
-    <link rel="stylesheet" type="text/css" href="./styles-options.scss">
+    <script src="./options/options.tsx" type="module"></script>
   </head>
-  <body>
-    <div class="header">
-      <img src="/icons/icon.svg">
-      <h1>NotifyMe</h1>
-    </div>
-
-    <div class="contents">
-
-      <div class="tab-bar">
-        <button class="tab-button active" id="reddit-tab-button" type="button" role="tab" data-tab-page-id="reddit-tab">Reddit</button>
-        <button class="tab-button" id="rss-tab-button" type="button" role="tab" data-tab-page-id="rss-tab">RSS</button>
-        <button class="tab-button" id="settings-tab-button" type="button" role="tab" data-tab-page-id="settings-tab">Settings</button>
-      </div>
-
-      <!-- Reddit Tab -->
-      <div class="tab" id="reddit-tab">
-
-        <form id="reddit-add-form" action="">
-          <label for="subreddit-input">Subreddit:</label>
-          <input id="subreddit-input" required>
-          <label for="user-input">User:</label>
-          <input id="user-input" required>
-          <button>Add</button>
-        </form>
-        
-        <div id="reddit-feeds-list"></div>
-
-      </div>
-      <!-- Reddit Tab END -->
-
-      <!-- RSS Tab -->
-      <div class="tab" id="rss-tab">
-
-        <form id="rss-add-form" action="">
-          <label for="feed-input">Feed:</label>
-          <input id="feed-input" required>
-          <button>Add</button>
-        </form>
-        
-        <div id="rss-feeds-list"></div>
-
-      </div>
-      <!-- RSS Tab END -->
-
-      <!-- Settings Pane -->
-      <div class="tab" id="settings-tab">
-
-        <form id="settings-form" action="">
-          <div>
-            <label for="update-period-input">Update Period:</label>
-            <input id="update-period-input" type="number" min="0" step="any" required><span>min</span>
-          </div>
-          <div id="apply-button-container">
-            <button>Apply</button>
-          </div>
-        </form>
-
-        <div id="settings-sub-container">
-          <button id="export-feeds-button" type="button">Export Feeds</button>
-          <button id="import-feeds-button" type="button">Import Feeds</button>
-          <a href="__URL__" target="_blank">__VERSION__</a>
-        </div>
-
-      </div>
-      <!-- Settings Tab Pane END -->
-
-    </div>
+  <body class="h-full">
+    <div id="root" class="h-full flex flex-col"></div>
   </body>
 </html>

@@ -3,11 +3,16 @@
 ## Unreleased
 ### Added:
 ### Changed:
-- Reduced UI code.
 ### Deprecated:
 ### Removed:
 ### Fixed:
 ### Security:
+
+## 1.0.2
+### Changed:
+- Rewrote UI in React + TailwindCSS.
+- Improved verification when fetching data.
+- RSS feed fetching now uses XML parsing instead of Regex.
 
 ## 1.0.1
 ### Added:

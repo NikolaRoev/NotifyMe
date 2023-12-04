@@ -1,11 +1,11 @@
 import { type BrowserContext, chromium, test } from "@playwright/test";
 import { type RSSTextData, getDefaultTextData } from "../data/rss";
-import { Builder } from "xml2js";
+import { XMLBuilder } from "fast-xml-parser";
 import path from "path";
 
 
 
-interface Fixtures {
+type Fixtures = {
     context: BrowserContext,
     extensionId: string,
     reddit: {
@@ -84,11 +84,11 @@ export const extensionTest = test.extend<Fixtures>({
         };
 
         await context.route("https://www.rss.com/**/*", async (route) => {
-            const builder = new Builder({ renderOpts: { pretty: false } });
+            const builder = new XMLBuilder();
             await route.fulfill({
                 contentType: "text/xml",
                 status: rss.status,
-                body: builder.buildObject(rss.textData)
+                body: builder.build(rss.textData) as string
             });
         });
 

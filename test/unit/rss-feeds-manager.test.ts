@@ -23,7 +23,7 @@ suite("Adding feeds", () => {
 
         expect(feeds.feeds).toEqual([{
             lastRead: {
-                guid: post1.guid._,
+                guid: post1.guid,
                 timestamp: Date.parse(post1.pubDate)
             },
             name: rss.textData.rss.channel.title,
@@ -83,12 +83,12 @@ suite("Update", () => {
 
         expect(posts).toEqual([{
             created: Date.parse(post0.pubDate),
-            id: post0.guid._,
+            id: post0.guid,
             source: rss.textData.rss.channel.title,
             title: post0.title,
             url: post0.link
         }]);
-        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post0.guid._);
+        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post0.guid);
         expect(feeds.feeds[0]?.lastRead?.timestamp).toEqual(Date.parse(post0.pubDate));
     });
 
@@ -96,7 +96,7 @@ suite("Update", () => {
         feeds.feeds.push({
             name: "testFeed",
             url: "testFeed",
-            lastRead: { guid: post1.guid._, timestamp: Date.parse(post1.pubDate) }
+            lastRead: { guid: post1.guid, timestamp: Date.parse(post1.pubDate) }
         });
         rss.textData.rss.channel.item.push(post2, post1, post0);
 
@@ -104,12 +104,12 @@ suite("Update", () => {
 
         expect(posts).toEqual([{
             created: Date.parse(post2.pubDate),
-            id: post2.guid._,
+            id: post2.guid,
             source: rss.textData.rss.channel.title,
             title: post2.title,
             url: post2.link
         }]);
-        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post2.guid._);
+        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post2.guid);
         expect(feeds.feeds[0]?.lastRead?.timestamp).toEqual(Date.parse(post2.pubDate));
     });
 
@@ -117,7 +117,7 @@ suite("Update", () => {
         feeds.feeds.push({
             name: "testFeed",
             url: "testFeed",
-            lastRead: { guid: post1.guid._, timestamp: Date.parse(post1.pubDate) }
+            lastRead: { guid: post1.guid, timestamp: Date.parse(post1.pubDate) }
         });
         rss.textData.rss.channel.item.push(post2, post0);
 
@@ -125,12 +125,12 @@ suite("Update", () => {
 
         expect(posts).toEqual([{
             created: Date.parse(post2.pubDate),
-            id: post2.guid._,
+            id: post2.guid,
             source: rss.textData.rss.channel.title,
             title: post2.title,
             url: post2.link
         }]);
-        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post2.guid._);
+        expect(feeds.feeds[0]?.lastRead?.guid).toEqual(post2.guid);
         expect(feeds.feeds[0]?.lastRead?.timestamp).toEqual(Date.parse(post2.pubDate));
     });
 
@@ -147,10 +147,10 @@ suite("Update", () => {
 
     rssTest("Can catch invalid RSS feed", async ({ manager, feeds, rss }) => {
         feeds.feeds.push({ name: "testFeed", url: "testFeed" });
-        rss.textData.rss.$.version = "INVALID";
+        rss.textData.rss.channel.item.push({ invalid: true });
 
         const result = manager.update(feeds);
 
-        await expect(result).rejects.toThrow("Invalid RSS feed");
+        await expect(result).rejects.toThrow("Failed to get RSS feed: ");
     });
 });

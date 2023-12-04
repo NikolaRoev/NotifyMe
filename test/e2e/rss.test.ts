@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { addRssFeed } from "./utility";
 import { extensionTest } from "./fixtures";
+import { formatDistanceToNowStrict } from "date-fns";
 import { post0 } from "../data/rss";
-import { relativeTime } from "../../utility/relative-time";
 
 
 
@@ -40,11 +40,11 @@ test.describe("Feeds", () => {
     });
 
     extensionTest("Can catch invalid RSS feed", async ({ page, extensionId, rss }) => {
-        rss.textData.rss.$.version = "INVALID";
+        rss.textData.rss.channel.item.push({ invalid: true });
         await addRssFeed(page, extensionId, rss.url);
 
         await page.waitForEvent("dialog", async (dialog) => {
-            expect(dialog.message()).toEqual("Failed to add feed: Error: Invalid RSS feed.");
+            expect(dialog.message()).toContain("Failed to add feed: Error: Failed to get RSS feed:");
             await dialog.accept();
             return true;
         });
@@ -64,7 +64,7 @@ test.describe("Posts", () => {
     extensionTest("Can get new post", async ({ page, rss }) => {
         await expect(page.getByText(post0.title)).toBeVisible();
         await expect(page.getByText(rss.textData.rss.channel.title)).toBeVisible();
-        await expect(page.getByText(relativeTime(Date.parse(post0.pubDate)))).toBeVisible();
+        await expect(page.getByText(formatDistanceToNowStrict(Date.parse(post0.pubDate), { addSuffix: true }))).toBeVisible();
     });
 
     extensionTest("Can open new post", async ({ context, page }) => {

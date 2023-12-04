@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { submission0, submission1 } from "../data/reddit";
 import { addRedditFeed } from "./utility";
 import { extensionTest } from "./fixtures";
-import { relativeTime } from "../../utility/relative-time";
+import { formatDistanceToNowStrict } from "date-fns";
 
 
 
@@ -74,7 +74,7 @@ test.describe("Posts", () => {
     extensionTest("Can get new post", async ({ page }) => {
         await expect(page.getByText(submission1.data.title)).toBeVisible();
         await expect(page.getByText(`In r/testSubreddit by u/${submission1.data.author}`)).toBeVisible();
-        await expect(page.getByText(relativeTime(submission1.data.created * 1000))).toBeVisible();
+        await expect(page.getByText(formatDistanceToNowStrict(submission1.data.created * 1000, { addSuffix: true }))).toBeVisible();
     });
 
     extensionTest("Can open new post", async ({ context, page }) => {

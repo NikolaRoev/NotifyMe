@@ -34,6 +34,7 @@
 
 		// Language and Environment:
 		"target": "ESNext",
+		"jsx": "preserve",
 
 		// Completeness:
 		"skipLibCheck": true

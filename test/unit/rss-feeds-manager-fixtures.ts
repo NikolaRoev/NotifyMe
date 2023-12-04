@@ -1,11 +1,11 @@
 import { type Mock, test, vi } from "vitest";
 import { type RSSFeeds, RSSFeedsManager } from "../../src/feeds/rss-feeds-manager";
 import { type RSSTextData, getDefaultTextData } from "../data/rss";
-import { Builder } from "xml2js";
+import { XMLBuilder } from "fast-xml-parser";
 
 
 
-interface Fixtures {
+type Fixtures = {
     manager: RSSFeedsManager,
     feeds: RSSFeeds,
     rss: {
@@ -36,8 +36,8 @@ export const rssTest = test.extend<Fixtures>({
             }
         };
         rss.response.text = vi.fn().mockImplementation(() => {
-            const builder = new Builder({ renderOpts: { pretty: false } });
-            return builder.buildObject(rss.textData);
+            const builder = new XMLBuilder();
+            return builder.build(rss.textData) as string;
         });
         global.fetch = vi.fn().mockResolvedValue(rss.response);
 

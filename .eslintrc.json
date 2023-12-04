@@ -1,9 +1,7 @@
 {
   "env": {
     "browser": true,
-    "node": true,
-    "commonjs": true,
-    "es2022": true
+    "es2023": true
   },
   "ignorePatterns": ["node_modules/", "dist/", "!.*/"],
   "extends": [
@@ -63,26 +61,35 @@
   },
   "overrides": [
     {
-      "files": ["**/*.ts"],
+      "files": ["**/*.ts", "**/*.tsx"],
       "extends": [
-        "eslint:recommended",
         "plugin:@typescript-eslint/strict-type-checked",
-        "plugin:@typescript-eslint/stylistic-type-checked"
+        "plugin:@typescript-eslint/stylistic-type-checked",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:react-hooks/recommended"
       ],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": "./tsconfig.json",
-        "tsconfigRootDir": "."
+        "tsconfigRootDir": ".",
+        "ecmaFeatures": {
+          "jsx": true
+        }
       },
+      "plugins": ["react", "react-refresh", "react-hooks"],
       "rules": {
         // Overrides.
         "@typescript-eslint/consistent-type-definitions": "off",
-        "@typescript-eslint/restrict-template-expressions": "off"
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
       },
       "settings": {
+        "react": {
+          "version": "detect"
+        },
         "import/resolver": {
-          "typescript": true,
-          "node": true
+          "typescript": {}
         }
       }
     }

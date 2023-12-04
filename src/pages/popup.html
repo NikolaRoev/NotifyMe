@@ -1,16 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script src="./popup.ts" type="module"></script>
-    <link rel="stylesheet" type="text/css" href="./styles-popup.scss">
+    <script src="./popup/popup.tsx" type="module"></script>
   </head>
   <body>
-    <div class="nav-bar">
-      <button id="options-button" class="nav-button" type="button" title="Options"><img src="/icons/gear.svg"></button>
-      <button id="update-button" class="nav-button" type="button" title="Update"><img src="/icons/arrow-clockwise.svg"></button>
-      <button id="open-all-button" class="nav-button" type="button" title="Open All"><img src="/icons/box-arrow-up-right.svg"></button>
-      <button id="mark-all-read-button" class="nav-button" type="button" title="Mark All Read"><img src="/icons/check-all.svg"></button>
-    </div>
-    <div id="posts-list"></div>
+    <div id="root" class="w-[300px] h-[400px] p-[3px] flex flex-col bg-neutral-50 select-none"></div>
   </body>
 </html>

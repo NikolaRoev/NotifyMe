@@ -3,7 +3,7 @@ import { type RedditFeeds, RedditFeedsManager } from "../../src/feeds/reddit-fee
 
 
 
-interface Fixtures {
+type Fixtures = {
     manager: RedditFeedsManager,
     feeds: RedditFeeds,
     reddit: {

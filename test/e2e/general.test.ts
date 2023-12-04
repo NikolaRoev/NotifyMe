@@ -96,7 +96,7 @@ test.describe("Options", () => {
             },
             [FeedSource.RSS]: {
                 feeds: [{
-                    lastRead: { guid: post0.guid._, timestamp: Date.parse(post0.pubDate) },
+                    lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
                     name: rss.textData.rss.channel.title,
                     url: rss.url
                 }]
@@ -138,7 +138,7 @@ test.describe("Options", () => {
             },
             [FeedSource.RSS]: {
                 feeds: [{
-                    lastRead: { guid: post0.guid._, timestamp: Date.parse(post0.pubDate) },
+                    lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
                     name: rss.textData.rss.channel.title,
                     url: rss.url
                 }]

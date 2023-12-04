@@ -1,14 +1,27 @@
 import { BaseFeedsManager, FeedSource, type Post } from "./base-feeds-manager";
+import { XMLParser } from "fast-xml-parser";
 import { wait } from "../../utility/wait";
+import { z } from "zod";
 
 
 
-type RSSItem = {
-    title: string,
-    url: string,
-    guid: string,
-    timestamp: number
-}
+const rssItemObject = z.object({
+    title: z.string(),
+    link: z.string(),
+    guid: z.string(),
+    pubDate: z.number()
+});
+
+const rssFeedObject = z.object({
+    rss: z.object({
+        channel: z.object({
+            title: z.string(),
+            item: z.optional(rssItemObject.array())
+        })
+    })
+});
+type RSSFeedObject = z.infer<typeof rssFeedObject>;
+
 
 export type RSSFeedData = {
     source: FeedSource.RSS,
@@ -39,12 +52,11 @@ export class RSSFeedsManager implements BaseFeedsManager {
         }
 
         const data = await this.request(feedData.url);
-        const name = this.extractName(data);
-        const items = this.extractItems(data);
+        const items = data.rss.channel.item;
 
-        const rssFeed: RSSFeed = { url: feedData.url, name: name };
-        if (items[0]) {
-            rssFeed.lastRead = { guid: items[0].guid, timestamp: items[0].timestamp };
+        const rssFeed: RSSFeed = { url: feedData.url, name: data.rss.channel.title };
+        if (items?.[0]) {
+            rssFeed.lastRead = { guid: items[0].guid, timestamp: items[0].pubDate };
         }
         feeds.feeds.push(rssFeed);
     }
@@ -76,80 +88,52 @@ export class RSSFeedsManager implements BaseFeedsManager {
     private async getPosts(feed: RSSFeed): Promise<Post[]> {
         const newPosts: Post[] = [];
         const data = await this.request(feed.url);
-        feed.name = this.extractName(data);
-        const items = this.extractItems(data);
-
-        for (const item of items) {
-            if (feed.lastRead && (feed.lastRead.guid === item.guid || item.timestamp < feed.lastRead.timestamp )) {
-                break;
-            }
-
-            newPosts.push({
-                id: item.guid,
-                title: item.title,
-                url: item.url,
-                source: feed.name,
-                created: item.timestamp
-            });
-        }
+        feed.name = data.rss.channel.title;
+        const items = data.rss.channel.item;
         
-        if (items[0]) {
-            feed.lastRead = { guid: items[0].guid, timestamp: items[0].timestamp };
+        if (items?.length) {
+            for (const item of items) {
+                if (feed.lastRead && (feed.lastRead.guid === item.guid || item.pubDate < feed.lastRead.timestamp )) {
+                    break;
+                }
+    
+                newPosts.push({
+                    id: item.guid,
+                    title: item.title,
+                    url: item.link,
+                    source: feed.name,
+                    created: item.pubDate
+                });
+            }
+            
+            if (items[0]) {
+                feed.lastRead = { guid: items[0].guid, timestamp: items[0].pubDate };
+            }
         }
+
         return newPosts;
     }
 
-    private extractName(data: string): string {
-        const sourceMatch = data.match(/<title>(?<name>.+?)<\/title>/);
-        if (sourceMatch?.groups?.name === undefined) {
-            throw new Error(`Invalid title match '${JSON.stringify(sourceMatch)}'`);
-        }
-
-        return sourceMatch.groups.name;
-    }
-
-    private extractItems(data: string): RSSItem[] {
-        const items: RSSItem[] = [];
-
-        const regex = new RegExp(
-            "<item>.*?" +
-            "<title>(?<title>.+?)<\\/title>.*?" +
-            "<link>(?<url>.+?)<\\/link>.*?" +
-            "<guid isPermaLink=\".*?\">(?<guid>.+?)<\\/guid>.*?" +
-            "<pubDate>(?<timestamp>.+?)<\\/pubDate>.*?" +
-            "<\\/item>", "gs"
-        );
-        const matches = Array.from(data.matchAll(regex));
-        for (const match of matches) {
-            if (!match.groups?.title || !match.groups.url || !match.groups.guid || !match.groups.timestamp) {
-                throw new Error(`Invalid post match '${JSON.stringify(match)}'`);
-            }
-
-            const item: RSSItem = {
-                title: match.groups.title,
-                url: match.groups.url,
-                guid: match.groups.guid,
-                timestamp: Date.parse(match.groups.timestamp)
-            };
-            items.push(item);
-        }
-
-        return items;
-    }
-
-    private async request(url: string): Promise<string> {
+    private async request(url: string): Promise<RSSFeedObject> {
         await wait(RSSFeedsManager.TIME_BETWEEN_REQUESTS);
         
         const response = await fetch(url);
-        const data = await response.text();
+        const text = await response.text();
         if (!response.ok) {
-            throw new Error(`[${response.status}] ${data}`);
+            throw new Error(`[${response.status}] ${text}`);
         }
 
-        if (!/<rss .*?version="2\.0".*?>.*<\/rss>/gs.test(data)) {
-            throw new Error("Invalid RSS feed");
+        const parser = new XMLParser({
+            parseTagValue: false,
+            isArray: (tagName) => tagName === "item",
+            tagValueProcessor: (tagName, tagValue) => tagName === "pubDate" ? Date.parse(tagValue) : tagValue
+        });
+        const data: unknown = parser.parse(text);
+        const result = rssFeedObject.safeParse(data);
+        if (!result.success) {
+            throw new Error(`Failed to get RSS feed: ${result.error}`);
         }
 
-        return data;
+        return result.data;
     }
 }
