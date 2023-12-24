@@ -3,13 +3,24 @@
     "browser": true,
     "es2023": true
   },
-  "ignorePatterns": ["node_modules/", "dist/", "!.*/"],
+  "ignorePatterns": ["node_modules/", "dist/"],
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "sourceType": "module"
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": ".",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "plugins": ["react", "react-refresh", "react-hooks"],
   "rules": {
     // Overrides.
     "no-empty-pattern": ["error", { "allowObjectPatternsAsParameters": true }],
@@ -57,41 +68,19 @@
     "no-trailing-spaces": ["warn", { "skipBlankLines": true, "ignoreComments": true }],
     "quotes": "warn",
     "semi": "error",
-    "switch-colon-spacing": "warn"
+    "switch-colon-spacing": "warn",
+
+    // Overrides.
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
   },
-  "overrides": [
-    {
-      "files": ["**/*.ts", "**/*.tsx"],
-      "extends": [
-        "plugin:@typescript-eslint/strict-type-checked",
-        "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:react/recommended",
-        "plugin:react/jsx-runtime",
-        "plugin:react-hooks/recommended"
-      ],
-      "parser": "@typescript-eslint/parser",
-      "parserOptions": {
-        "project": "./tsconfig.json",
-        "tsconfigRootDir": ".",
-        "ecmaFeatures": {
-          "jsx": true
-        }
-      },
-      "plugins": ["react", "react-refresh", "react-hooks"],
-      "rules": {
-        // Overrides.
-        "@typescript-eslint/consistent-type-definitions": "off",
-        "@typescript-eslint/restrict-template-expressions": "off",
-        "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
-      },
-      "settings": {
-        "react": {
-          "version": "detect"
-        },
-        "import/resolver": {
-          "typescript": {}
-        }
-      }
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {}
     }
-  ]
+  }
 }
