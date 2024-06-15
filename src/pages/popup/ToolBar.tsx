@@ -26,6 +26,11 @@ function ToolButton({ onClick, title, imageSrc }: ToolButtonProps) {
 
 
 export default function ToolBar({ getPosts }: { getPosts: () => void }) {
+    function openOptions() {
+        chrome.runtime.openOptionsPage()
+            .catch((reason) => { console.error(`Failed to open options page: ${reason}.`); });
+    }
+
     function update() {
         const message: Message = { type: "Update" };
         chrome.runtime.sendMessage(message)
@@ -50,7 +55,7 @@ export default function ToolBar({ getPosts }: { getPosts: () => void }) {
 
     return (
         <div className="flex justify-around p-[3px] border-[1px] border-solid border-neutral-600 border-b-0">
-            <ToolButton onClick={() => { chrome.runtime.openOptionsPage(); }} title="Options" imageSrc="/icons/gear.svg"/>
+            <ToolButton onClick={openOptions} title="Options" imageSrc="/icons/gear.svg"/>
             <ToolButton onClick={update} title="Update" imageSrc="/icons/arrow-clockwise.svg"/>
             <ToolButton onClick={openAll} title="Open All" imageSrc="/icons/box-arrow-up-right.svg"/>
             <ToolButton onClick={markAllRead} title="Mark All Read" imageSrc="/icons/check-all.svg"/>
