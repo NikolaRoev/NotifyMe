@@ -4,6 +4,7 @@ import { Err, Ok, type Result } from "../utility/result";
 import { type Settings, defaultSettings } from "./settings";
 import { RSSFeedsManager } from "./feeds/rss-feeds-manager";
 import { RedditFeedsManager } from "./feeds/reddit-feeds-manager";
+import { createAlarm } from "./alarm";
 import { formatDistanceToNowStrict } from "date-fns";
 
 
@@ -22,7 +23,7 @@ export async function setSettings(newSettings: Settings) {
     const currentSettings = await getSettings();
 
     if (currentSettings.updatePeriod !== newSettings.updatePeriod) {
-        await chrome.alarms.create("", { periodInMinutes: newSettings.updatePeriod });
+        await createAlarm(newSettings.updatePeriod);
     }
     
     await Storage.set(Storage.GenericKey.Settings, newSettings);

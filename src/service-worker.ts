@@ -1,13 +1,12 @@
 import * as Application from "./application";
 import type { Message } from "./message";
+import { checkAlarm } from "./alarm";
 
 
 
-chrome.runtime.onInstalled.addListener(() => {
-    Application.getSettings()
-        .then(async (settings) => { await chrome.alarms.create("", { periodInMinutes: settings.updatePeriod }); })
-        .catch((reason) => { console.error(`Failed to set update period on installed: ${reason}.`); });
-});
+Application.getSettings()
+    .then(async (settings) => { await checkAlarm(settings.updatePeriod); })
+    .catch((reason) => { console.error(`Failed to check alarm: ${reason}.`); });
 
 chrome.alarms.onAlarm.addListener(() => {
     Application.update()
