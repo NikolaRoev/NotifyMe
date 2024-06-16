@@ -1,4 +1,5 @@
 import { FeedSource, type Post } from "./feeds/base-feeds-manager";
+import type { LogMessage } from "./log";
 import type { RSSFeeds } from "./feeds/rss-feeds-manager";
 import type { RedditFeeds } from "./feeds/reddit-feeds-manager";
 import type { Settings } from "./settings";
@@ -6,6 +7,7 @@ import type { Settings } from "./settings";
 
 
 export enum GenericKey {
+    Log = "LOG-KEY",
     Settings = "SETTINGS-KEY",
     UnreadPosts = "UNREAD-POSTS-KEY",
 }
@@ -13,6 +15,7 @@ export enum GenericKey {
 type Keys = GenericKey | FeedSource;
 
 type Type<T> =
+    T extends GenericKey.Log ? LogMessage[] :
     T extends GenericKey.Settings ? Settings :
     T extends GenericKey.UnreadPosts ? Post[] :
     T extends FeedSource.Reddit ? RedditFeeds :

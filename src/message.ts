@@ -2,6 +2,7 @@ import { type FeedData, FeedSource, type Feeds } from "./feeds/base-feeds-manage
 import { type Settings } from "./settings";
 
 
+
 export type Message =
     { type: "GetSettings" } |
     { type: "SetSettings", newSettings: Settings } |
@@ -10,4 +11,5 @@ export type Message =
     { type: "GetUnreadPosts" } |
     { type: "ReadPosts", open: boolean, id?: string } |
     { type: "Update" } |
-    { type: "ImportFeeds", combinedFeedsObject: { [Key in FeedSource]: Feeds } }
+    { type: "ImportFeeds", combinedFeedsObject: { [Key in FeedSource]: Feeds } } |
+    { type: "GetLog" }

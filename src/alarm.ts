@@ -1,7 +1,12 @@
+import { info } from "./log";
+
+
+
 const ALARM_NAME = "NOTIFYME-ALARM";
 
 
 export function createAlarm(periodInMinutes: number) {
+    info(`Created alarm with an update period of ${periodInMinutes} minutes.`);
     return chrome.alarms.create(ALARM_NAME, { periodInMinutes });
 }
 

@@ -2,6 +2,7 @@ import * as Storage from "./storage";
 import { BaseFeedsManager, type FeedData, FeedSource, type Feeds, type Post } from "./feeds/base-feeds-manager";
 import { Err, Ok, type Result } from "../utility/result";
 import { type Settings, defaultSettings } from "./settings";
+import { error, info, warn } from "./log";
 import { RSSFeedsManager } from "./feeds/rss-feeds-manager";
 import { RedditFeedsManager } from "./feeds/reddit-feeds-manager";
 import { createAlarm } from "./alarm";
@@ -42,7 +43,7 @@ export async function addFeed(feedData: FeedData): Promise<Result<boolean>> {
     }
     catch (reason) {
         const message = `Failed to add feed: ${reason}.`;
-        console.warn(message);
+        warn(message);
         return Err(message);
     }
 }
@@ -56,7 +57,7 @@ export async function removeFeed(feedData: FeedData): Promise<Result<boolean>> {
     }
     catch (reason) {
         const message = `Failed to remove feed: ${reason}.`;
-        console.warn(message);
+        warn(message);
         return Err(message);
     }
 }
@@ -86,6 +87,8 @@ export async function readPosts(open: boolean, id?: string) {
 }
 
 export async function update() {
+    info("Updating feeds.");
+
     const newPosts: Post[] = [];
     for (const source of Object.values(FeedSource)) {
         try {
@@ -94,7 +97,7 @@ export async function update() {
             await Storage.set(source, feeds);
         }
         catch (reason) {
-            console.error(`Failed to update feed '${source}': ${reason}.`);
+            error(`Failed to update feed '${source}': ${reason}.`);
         }
     }
 

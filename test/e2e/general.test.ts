@@ -171,4 +171,12 @@ test.describe("Options", () => {
 
         expect(await page.getByText(manifest.version).getAttribute("href")).toEqual("https://github.com/NikolaRoev/NotifyMe");
     });
+
+    extensionTest("Log is displayed", async ({ context, page, extensionId }) => {
+        await context.waitForEvent("request");
+        await page.goto(`chrome-extension://${extensionId}/options.html`);
+        await page.getByRole("tab", { name: "Log" }).click();
+
+        await expect(page.getByText("Updating feeds.")).toBeVisible();
+    });
 });
