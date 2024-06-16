@@ -32,8 +32,8 @@ function exportFeeds() {
             alert("Feeds copied to clipboard.");
         }
     };
-    createExportFile().catch((reason: Error) => {
-        if (reason.name !== "AbortError") {
+    createExportFile().catch((reason: unknown) => {
+        if ((reason as Error).name !== "AbortError") {
             const message = `Failed to export feeds: ${reason}.`;
             console.error(message);
             alert(message);
@@ -68,8 +68,8 @@ function importFeeds() {
         }
     };
 
-    readImportFile().catch((reason: Error) => {
-        if (reason.name !== "AbortError") {
+    readImportFile().catch((reason: unknown) => {
+        if ((reason as Error).name !== "AbortError") {
             const message = `Failed to import feeds: ${reason}.`;
             console.error(message);
             alert(message);
@@ -86,7 +86,7 @@ function useSettings() {
         const message: Message = { type: "GetSettings" };
         chrome.runtime.sendMessage(message).then((settings: Settings) => {
             setSettings({...settings, updatePeriod: settings.updatePeriod});
-        }).catch((reason) => { console.error(`Failed to get settings for options: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to get settings for options: ${reason}.`); });
     };
 
     useEffect(() => {
@@ -111,7 +111,7 @@ export default function SettingsTab() {
         const message: Message = { type: "SetSettings", newSettings: settings };
         chrome.runtime.sendMessage(message)
             .then(() => { getSettings(); })
-            .catch((reason) => { console.error(`Failed to set settings from options: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to set settings from options: ${reason}.`); });
     }
 
 

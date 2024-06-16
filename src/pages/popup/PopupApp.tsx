@@ -13,7 +13,7 @@ function usePosts() {
         const message: Message = { type: "GetUnreadPosts" };
         chrome.runtime.sendMessage(message).then((posts: Post[]) => {
             setPosts(posts);
-        }).catch((reason) => { console.error(`Failed to get posts in popup: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to get posts in popup: ${reason}.`); });
     };
 
     useEffect(() => {

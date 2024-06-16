@@ -16,7 +16,7 @@ function useRSSFeeds() {
         const message: Message = { type: "GetFeeds", source: FeedSource.RSS };
         chrome.runtime.sendMessage(message).then((feeds: RSSFeeds) => {
             setRSSFeeds(feeds);
-        }).catch((reason) => { console.error(`Failed to update RSS feeds: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to update RSS feeds: ${reason}.`); });
     };
 
     useEffect(() => {
@@ -43,7 +43,7 @@ export default function RSSTab() {
         };
         chrome.runtime.sendMessage(message).then((value: boolean) => {
             feedInputRef.current?.setCustomValidity(value ? "Feed already added" : "");
-        }).catch((reason) => { console.error(`Failed to validate RSS form: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to validate RSS form: ${reason}.`); });
     }, [feed]);
 
     
@@ -65,7 +65,7 @@ export default function RSSTab() {
             else {
                 alert(result.error);
             }
-        }).catch((reason) => { console.error(`Failed to add RSS feed from options: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to add RSS feed from options: ${reason}.`); });
     }
 
     

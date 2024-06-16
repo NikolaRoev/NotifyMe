@@ -77,7 +77,7 @@ export class RedditFeedsManager implements BaseFeedsManager {
         const subredditIndex = feeds.subreddits.findIndex((value) => value.name === feedData.subreddit);
         const subredditObj = feeds.subreddits[subredditIndex];
 
-        if (subredditObj && subredditObj.users.includes(feedData.user)) {
+        if (subredditObj?.users.includes(feedData.user)) {
             subredditObj.users = subredditObj.users.filter((value) => value !== feedData.user);
 
             if (subredditObj.users.length === 0) {
@@ -91,7 +91,7 @@ export class RedditFeedsManager implements BaseFeedsManager {
 
     hasFeed(feeds: RedditFeeds, feedData: RedditFeedData): boolean {
         const subredditObj = feeds.subreddits.find((value) => value.name === feedData.subreddit);
-        return !!(subredditObj && subredditObj.users.includes(feedData.user));
+        return !!(subredditObj?.users.includes(feedData.user));
     }
 
     async update(feeds: RedditFeeds): Promise<Post[]> {

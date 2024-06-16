@@ -45,14 +45,14 @@ export default function PostsList({ posts, getPosts }: { posts: Post[], getPosts
         const message: Message = { type: "ReadPosts", open: true, id: id };
         chrome.runtime.sendMessage(message)
             .then(() => { getPosts(); })
-            .catch((reason) => { console.error(`Failed to open post: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to open post: ${reason}.`); });
     }
 
     function markRead(id: string) {
         const message: Message = { type: "ReadPosts", open: false, id: id };
         chrome.runtime.sendMessage(message)
             .then(() => { getPosts(); })
-            .catch((reason) => { console.error(`Failed to mark post as read: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to mark post as read: ${reason}.`); });
     }
     
 

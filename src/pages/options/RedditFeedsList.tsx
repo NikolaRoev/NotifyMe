@@ -21,7 +21,7 @@ function RedditFeed({ subreddit, getRedditFeeds }: { subreddit: Subreddit, getRe
                 alert(`Failed to remove user ${user} from ${subreddit.name}: ${result.error}.`);
             }
             getRedditFeeds();
-        }).catch((reason) => { console.error(`Failed to remove Reddit feed: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to remove Reddit feed: ${reason}.`); });
     }
     
 

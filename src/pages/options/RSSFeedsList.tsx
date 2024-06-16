@@ -20,7 +20,7 @@ export default function RSSFeedsList({ rssFeeds, getRSSFeeds }: { rssFeeds: RSSF
                 alert(`Failed to remove feed ${feed.name}: ${result.error}.`);
             }
             getRSSFeeds();
-        }).catch((reason) => { console.error(`Failed to remove RSS feed: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to remove RSS feed: ${reason}.`); });
     }
 
 

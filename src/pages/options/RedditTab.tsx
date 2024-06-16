@@ -16,7 +16,7 @@ function useRedditFeeds() {
         const message: Message = { type: "GetFeeds", source: FeedSource.Reddit };
         chrome.runtime.sendMessage(message).then((feeds: RedditFeeds) => {
             setRedditFeeds(feeds);
-        }).catch((reason) => { console.error(`Failed to update Reddit feeds: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to update Reddit feeds: ${reason}.`); });
     };
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export default function RedditTab() {
         };
         chrome.runtime.sendMessage(message).then((value: boolean) => {
             userInputRef.current?.setCustomValidity(value ? "Feed already added" : "");
-        }).catch((reason) => { console.error(`Failed to validate Reddit form: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to validate Reddit form: ${reason}.`); });
     }, [inputs]);
 
 
@@ -67,7 +67,7 @@ export default function RedditTab() {
             else {
                 alert(result.error);
             }
-        }).catch((reason) => { console.error(`Failed to add Reddit feed from options: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to add Reddit feed from options: ${reason}.`); });
     }
 
     

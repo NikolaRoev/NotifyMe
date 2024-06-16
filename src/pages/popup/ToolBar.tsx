@@ -28,28 +28,28 @@ function ToolButton({ onClick, title, imageSrc }: ToolButtonProps) {
 export default function ToolBar({ getPosts }: { getPosts: () => void }) {
     function openOptions() {
         chrome.runtime.openOptionsPage()
-            .catch((reason) => { console.error(`Failed to open options page: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to open options page: ${reason}.`); });
     }
 
     function update() {
         const message: Message = { type: "Update" };
         chrome.runtime.sendMessage(message)
             .then(() => { getPosts(); })
-            .catch((reason) => { console.error(`Failed to update from popup: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to update from popup: ${reason}.`); });
     }
 
     function openAll() {
         const message: Message = { type: "ReadPosts", open: true };
         chrome.runtime.sendMessage(message)
             .then(() => { getPosts(); })
-            .catch((reason) => { console.error(`Failed to open all posts: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to open all posts: ${reason}.`); });
     }
 
     function markAllRead() {
         const message: Message = { type: "ReadPosts", open: false };
         chrome.runtime.sendMessage(message)
             .then(() => { getPosts(); })
-            .catch((reason) => { console.error(`Failed to mark all posts as read: ${reason}.`); });
+            .catch((reason: unknown) => { console.error(`Failed to mark all posts as read: ${reason}.`); });
     }
 
 

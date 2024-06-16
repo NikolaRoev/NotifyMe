@@ -7,7 +7,9 @@ import { redditTest } from "./reddit-feeds-manager-fixtures";
 
 beforeEach(() => {
     vi.useFakeTimers();
-    vi.runAllTimersAsync().catch((reason) => { console.error(`Failed to run timers: ${reason}.`); });
+    vi.runAllTimersAsync().catch((reason: unknown) => {
+        console.error(`Failed to run timers: ${reason}.`);
+    });
 });
 
 afterEach(() => {

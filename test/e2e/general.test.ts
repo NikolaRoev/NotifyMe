@@ -1,14 +1,14 @@
 import { addRedditFeed, addRssFeed, setUpdatePeriod } from "./utility";
-import { expect, test } from "@playwright/test";
 import { post0, post1 } from "../data/rss";
 import { FeedSource } from "../../src/feeds/base-feeds-manager";
+import { expect } from "@playwright/test";
 import { extensionTest } from "./fixtures";
 import { manifest } from "../../manifest";
 import { submission0 } from "../data/reddit";
 
 
 
-test.describe("Popup", () => {
+extensionTest.describe("Popup", () => {
     extensionTest("UI correct when there are no unread posts", async ({ page, extensionId }) => {
         await page.goto(`chrome-extension://${extensionId}/popup.html`);
         await expect(page.getByText("No unread posts")).toBeVisible();
@@ -68,7 +68,7 @@ test.describe("Popup", () => {
 });
 
 
-test.describe("Options", () => {
+extensionTest.describe("Options", () => {
     extensionTest("Can change update period", async ({ context, page, extensionId, rss }) => {
         await addRssFeed(page, extensionId, rss.url, rss.textData.rss.channel.title);
         await setUpdatePeriod(page, extensionId, (1 / 60) * 3);

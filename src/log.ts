@@ -37,21 +37,21 @@ async function log(severity: Severity, message: string) {
 
 export function info(message: string) {
     console.log(message);
-    log(Severity.INFO, message).catch((reason) => {
+    log(Severity.INFO, message).catch((reason: unknown) => {
         console.error(`Failed to store info log: ${reason}.`);
     });
 }
 
 export function warn(message: string) {
     console.warn(message);
-    log(Severity.WARN, message).catch((reason) => {
+    log(Severity.WARN, message).catch((reason: unknown) => {
         console.error(`Failed to store warn log: ${reason}.`);
     });
 }
 
 export function error(message: string) {
     console.error(message);
-    log(Severity.ERROR, message).catch((reason) => {
+    log(Severity.ERROR, message).catch((reason: unknown) => {
         console.error(`Failed to store error log: ${reason}.`);
     });
 }

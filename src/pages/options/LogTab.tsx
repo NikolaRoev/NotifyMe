@@ -14,7 +14,7 @@ function useLog() {
         const message: Message = { type: "GetLog" };
         chrome.runtime.sendMessage(message).then((log: LogMessage[]) => {
             setLog(log);
-        }).catch((reason) => { console.error(`Failed to get log: ${reason}.`); });
+        }).catch((reason: unknown) => { console.error(`Failed to get log: ${reason}.`); });
     };
 
     useEffect(() => {

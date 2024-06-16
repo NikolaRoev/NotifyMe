@@ -1,12 +1,12 @@
-import { expect, test } from "@playwright/test";
 import { addRssFeed } from "./utility";
+import { expect } from "@playwright/test";
 import { extensionTest } from "./fixtures";
 import { formatDistanceToNowStrict } from "date-fns";
 import { post0 } from "../data/rss";
 
 
 
-test.describe("Feeds", () => {
+extensionTest.describe("Feeds", () => {
     extensionTest("Can add and then remove feed", async ({ page, extensionId, rss }) => {
         rss.textData.rss.channel.item.push(post0);
         await addRssFeed(page, extensionId, rss.url, rss.textData.rss.channel.title);
@@ -52,7 +52,7 @@ test.describe("Feeds", () => {
 });
 
 
-test.describe("Posts", () => {
+extensionTest.describe("Posts", () => {
     extensionTest.beforeEach(async ({ context, page, extensionId, rss }) => {
         await addRssFeed(page, extensionId, rss.url, rss.textData.rss.channel.title);
 

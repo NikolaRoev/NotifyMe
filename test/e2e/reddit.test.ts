@@ -1,12 +1,12 @@
-import { expect, test } from "@playwright/test";
 import { submission0, submission1 } from "../data/reddit";
 import { addRedditFeed } from "./utility";
+import { expect } from "@playwright/test";
 import { extensionTest } from "./fixtures";
 import { formatDistanceToNowStrict } from "date-fns";
 
 
 
-test.describe("Feeds", () => {
+extensionTest.describe("Feeds", () => {
     extensionTest("Can add and then remove feed", async ({ page, extensionId, reddit }) => {
         reddit.jsonData.data.children.push(submission0);
         await addRedditFeed(page, extensionId, "testSubreddit", "testUser0", true);
@@ -61,7 +61,7 @@ test.describe("Feeds", () => {
 });
 
 
-test.describe("Posts", () => {
+extensionTest.describe("Posts", () => {
     extensionTest.beforeEach(async ({ context, page, extensionId, reddit }) => {
         reddit.jsonData.data.children.push(submission0);
         await addRedditFeed(page, extensionId, "testSubreddit", submission1.data.author, true);
