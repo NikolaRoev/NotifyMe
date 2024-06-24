@@ -90,7 +90,7 @@ export class RSSFeedsManager implements BaseFeedsManager {
         const data = await this.request(feed.url);
         feed.name = data.rss.channel.title;
         const items = data.rss.channel.item;
-        
+
         if (items?.length) {
             for (const item of items) {
                 if (feed.lastRead && (feed.lastRead.guid === item.guid || item.pubDate < feed.lastRead.timestamp )) {

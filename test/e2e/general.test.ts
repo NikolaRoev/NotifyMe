@@ -177,6 +177,6 @@ extensionTest.describe("Options", () => {
         await page.goto(`chrome-extension://${extensionId}/options.html`);
         await page.getByRole("tab", { name: "Log" }).click();
 
-        await expect(page.getByText("Updating feeds.")).toBeVisible();
+        await expect(page.getByText("Updating feed").first()).toBeVisible();
     });
 });

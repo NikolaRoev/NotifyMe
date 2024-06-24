@@ -2,7 +2,8 @@ import * as Storage from "./storage";
 import { BaseFeedsManager, type FeedData, FeedSource, type Feeds, type Post } from "./feeds/base-feeds-manager";
 import { Err, Ok, type Result } from "../utility/result";
 import { type Settings, defaultSettings } from "./settings";
-import { error, info, warn } from "./log";
+import { error, getLog, info, warn } from "./log";
+import type { Message } from "./message";
 import { RSSFeedsManager } from "./feeds/rss-feeds-manager";
 import { RedditFeedsManager } from "./feeds/reddit-feeds-manager";
 import { createAlarm } from "./alarm";
@@ -43,7 +44,7 @@ export async function addFeed(feedData: FeedData): Promise<Result<boolean>> {
     }
     catch (reason) {
         const message = `Failed to add feed: ${reason}.`;
-        warn(message);
+        await warn(message);
         return Err(message);
     }
 }
@@ -57,7 +58,7 @@ export async function removeFeed(feedData: FeedData): Promise<Result<boolean>> {
     }
     catch (reason) {
         const message = `Failed to remove feed: ${reason}.`;
-        warn(message);
+        await warn(message);
         return Err(message);
     }
 }
@@ -87,23 +88,26 @@ export async function readPosts(open: boolean, id?: string) {
 }
 
 export async function update() {
-    info("Updating feeds.");
-
     const newPosts: Post[] = [];
+    const unreadPosts = await Storage.get(Storage.GenericKey.UnreadPosts, []);
+
     for (const source of Object.values(FeedSource)) {
         try {
+            await info(`Updating feed '${source}'.`);
+
             const feeds = await Storage.get(source, feedsManagers[source].getEmptyFeeds());
-            newPosts.push(...await feedsManagers[source].update(feeds));
+            const newFeedPosts = await feedsManagers[source].update(feeds);
+
+            newPosts.push(...newFeedPosts);
+            unreadPosts.push(...newFeedPosts);
+
+            await Storage.set(Storage.GenericKey.UnreadPosts, unreadPosts);
             await Storage.set(source, feeds);
         }
         catch (reason) {
-            error(`Failed to update feed '${source}': ${reason}.`);
+            await error(`Failed to update feed '${source}': ${reason}.`);
         }
     }
-
-    const unreadPosts = await Storage.get(Storage.GenericKey.UnreadPosts, []);
-    unreadPosts.push(...newPosts);
-    await Storage.set(Storage.GenericKey.UnreadPosts, unreadPosts);
 
     await chrome.action.setBadgeText({ text: unreadPosts.length ? `${unreadPosts.length}` : "" });
 
@@ -123,5 +127,75 @@ export async function update() {
 export async function importFeeds(combinedFeedsObject: { [Key in FeedSource]: Feeds }): Promise<void> {
     for (const source of Object.values(FeedSource)) {
         await Storage.set(source, combinedFeedsObject[source]);
+    }
+}
+
+export async function handleMessage(message: Message, sendResponse: (response?: unknown) => void) {
+    try {
+        switch (message.type) {
+            case "GetSettings": {
+                const settings = await getSettings();
+                sendResponse(settings);
+                break;
+            }
+            case "SetSettings": {
+                await setSettings(message.newSettings);
+                sendResponse();
+                break;
+            }
+            case "GetFeeds": {
+                const feeds = await getFeeds(message.source);
+                sendResponse(feeds);
+                break;
+            }
+            case "AddFeed": {
+                const result = await addFeed(message.feedData);
+                sendResponse(result);
+                break;
+            }
+            case "RemoveFeed": {
+                const result = await removeFeed(message.feedData);
+                sendResponse(result);
+                break;
+            }
+            case "HasFeed": {
+                const result = await hasFeed(message.feedData);
+                sendResponse(result);
+                break;
+            }
+            case "GetUnreadPosts": {
+                const unreadPosts = await getUnreadPosts();
+                sendResponse(unreadPosts);
+                break;
+            }
+            case "ReadPosts": {
+                await readPosts(message.open, message.id);
+                sendResponse();
+                break;
+            }
+            case "Update": {
+                await update();
+                sendResponse();
+                break;
+            }
+            case "ImportFeeds": {
+                await importFeeds(message.combinedFeedsObject);
+                sendResponse();
+                break;
+            }
+            case "GetLog": {
+                const log = await getLog();
+                sendResponse(log);
+                break;
+            }
+            default: {
+                const unreachable: never = message;
+                await error(`Invalid message '${JSON.stringify(unreachable)}'.`);
+                break;
+            }
+        }
+    }
+    catch (reason: unknown) {
+        await error(`Failed to '${message.type}': ${reason}.`);
     }
 }
