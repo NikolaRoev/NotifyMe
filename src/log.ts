@@ -35,25 +35,19 @@ async function log(severity: Severity, message: string) {
     await Storage.set(Storage.GenericKey.Log, log);
 }
 
-export function info(message: string) {
+export async function info(message: string) {
     console.log(message);
-    log(Severity.INFO, message).catch((reason: unknown) => {
-        console.error(`Failed to store info log: ${reason}.`);
-    });
+    await log(Severity.INFO, message);
 }
 
-export function warn(message: string) {
+export async function warn(message: string) {
     console.warn(message);
-    log(Severity.WARN, message).catch((reason: unknown) => {
-        console.error(`Failed to store warn log: ${reason}.`);
-    });
+    await log(Severity.WARN, message);
 }
 
-export function error(message: string) {
+export async function error(message: string) {
     console.error(message);
-    log(Severity.ERROR, message).catch((reason: unknown) => {
-        console.error(`Failed to store error log: ${reason}.`);
-    });
+    await log(Severity.ERROR, message);
 }
 
 export function getLog() {
