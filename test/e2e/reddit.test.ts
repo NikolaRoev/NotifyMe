@@ -58,6 +58,20 @@ extensionTest.describe("Feeds", () => {
             return true;
         });
     });
+
+    extensionTest("Can filter feeds", async ({ page, extensionId, reddit }) => {
+        reddit.jsonData.data.children.push(submission0);
+        await addRedditFeed(page, extensionId, "testSubreddit0", "testUser0", true);
+        await addRedditFeed(page, extensionId, "testSubreddit1", "testUser1", true);
+        const searchInput = page.locator("[name='feeds-search-input']");
+        await searchInput.fill("TEST");
+
+        await expect(page.getByText("testUser")).toHaveCount(2);
+
+        await searchInput.fill("NOT TEST");
+
+        await expect(page.getByText("testUser")).toHaveCount(0);
+    });
 });
 
 

@@ -1,67 +1,85 @@
-import type { RedditFeeds, Subreddit } from "../../feeds/reddit-feeds-manager";
 import ConfirmButton from "./ConfirmButton";
 import { FeedSource } from "../../feeds/base-feeds-manager";
+import FeedsList from "./FeedsList";
+import { GroupedVirtuoso } from "react-virtuoso";
 import type { Message } from "../../message";
+import type { RedditFeeds } from "../../feeds/reddit-feeds-manager";
 import type { Result } from "../../../utility/result";
+import clsx from "clsx";
 
 
 
-function RedditFeed({ subreddit, getRedditFeeds }: { subreddit: Subreddit, getRedditFeeds: () => void }) {
-    function removeUser(user: string) {
+export default function RedditFeedsList({ redditFeeds, getRedditFeeds }: { redditFeeds: RedditFeeds, getRedditFeeds: () => void }) {
+    function removeUser(subredditName: string, user: string) {
         const message: Message = {
             type: "RemoveFeed",
             feedData: {
                 source: FeedSource.Reddit,
-                subreddit: subreddit.name,
+                subreddit: subredditName,
                 user: user
             }
         };
         chrome.runtime.sendMessage(message).then((result: Result<boolean>) => {
             if (!result.ok) {
-                alert(`Failed to remove user ${user} from ${subreddit.name}: ${result.error}.`);
+                alert(`Failed to remove user ${user} from ${subredditName}: ${result.error}.`);
             }
             getRedditFeeds();
         }).catch((reason: unknown) => { console.error(`Failed to remove Reddit feed: ${reason}.`); });
     }
-    
 
-    const usersItems = subreddit.users.map((user) =>
-        <div key={user} className="flex even:bg-neutral-100">
-            <a
-                className="pl-[30px] grow text-[16px] flex items-center hover:underline"
-                href={`https://www.reddit.com/u/${user}`}
-                target="_blank" rel="noreferrer"
-            >{user}</a>
-            <ConfirmButton
-                initialText={"/icons/trash.svg"}
-                confirmText={"/icons/x-circle.svg"}
-                onClick={() => { removeUser(user); } }
-                title={`Remove ${user}`}
-            />
-        </div>
-    );
 
     return (
-        <div>
-            <a
-                className="pl-[5px] grow text-[18px] flex items-center hover:underline"
-                href={`https://www.reddit.com/r/${subreddit.name}`}
-                target="_blank" rel="noreferrer"
-            >{subreddit.name}</a>
-            <div>{usersItems}</div>
-        </div>
-    );
-}
+        <FeedsList
+            data={(filter) => {
+                const filteredData = redditFeeds.subreddits.reduce((acc, curr) => {
+                    const filteredUsers = curr.users.filter((user) => user.toLowerCase().includes(filter.toLowerCase()));
+                    return {
+                        subredditNames: [...acc.subredditNames, curr.name],
+                        users: [...acc.users, ...filteredUsers],
+                        groupCounts: [...acc.groupCounts, filteredUsers.length]
+                    };
+                }, { subredditNames: [] as string[], users: [] as string[], groupCounts: [] as number[] });
 
+                return <GroupedVirtuoso
+                    groupCounts={filteredData.groupCounts}
+                    groupContent={(index) => (
+                        <a
+                            className={clsx(
+                                "grow p-[5px] flex items-center text-[18px] hover:underline",
+                                "bg-white border-y border-t-neutral-600 border-b-neutral-300"
+                            )}
+                            href={`https://www.reddit.com/r/${filteredData.subredditNames[index]}`}
+                            target="_blank" rel="noreferrer"
+                        >{filteredData.subredditNames[index]}</a>
+                    )}
+                    itemContent={(index, groupIndex) => {
+                        const subredditName = filteredData.subredditNames[groupIndex];
+                        const user = filteredData.users[index];
 
-export default function RedditFeedsList({ redditFeeds, getRedditFeeds }: { redditFeeds: RedditFeeds, getRedditFeeds: () => void }) {
-    const redditFeedsItems = redditFeeds.subreddits.map((subreddit) =>
-        <RedditFeed key={subreddit.name} subreddit={subreddit} getRedditFeeds={getRedditFeeds} />
-    );
+                        if (!subredditName || !user) {
+                            throw new Error(
+                                `Invalid subreddit or user: ${groupIndex}: ${subredditName}, ${index} ${user}.`
+                            );
+                        }
 
-    return (
-        <div className="mt-[30px] flex flex-col grow overflow-y-auto gap-y-[10px] border-[1px] border-neutral-600">
-            {redditFeedsItems}
-        </div>
+                        return (
+                            <div className={clsx("flex", {"bg-neutral-100": index % 2})}>
+                                <a
+                                    className="pl-[30px] grow text-[16px] flex items-center hover:underline"
+                                    href={`https://www.reddit.com/u/${user}`}
+                                    target="_blank" rel="noreferrer"
+                                >{user}</a>
+                                <ConfirmButton
+                                    initialSrc={"/icons/trash.svg"}
+                                    confirmSrc={"/icons/x-circle.svg"}
+                                    onClick={() => { removeUser(subredditName, user); }}
+                                    title={`Remove ${user}`}
+                                />
+                            </div>
+                        );
+                    }}
+                />;
+            }}
+        />
     );
 }

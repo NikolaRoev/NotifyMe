@@ -95,10 +95,13 @@ extensionTest.describe("Options", () => {
                 }]
             },
             [FeedSource.RSS]: {
-                feeds: [{
-                    lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
-                    name: rss.textData.rss.channel.title,
-                    url: rss.url
+                hosts: [{
+                    name: "https://www.rss.com",
+                    feeds: [{
+                        lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
+                        name: rss.textData.rss.channel.title,
+                        url: rss.url
+                    }]
                 }]
             }
         };
@@ -137,10 +140,13 @@ extensionTest.describe("Options", () => {
                 }]
             },
             [FeedSource.RSS]: {
-                feeds: [{
-                    lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
-                    name: rss.textData.rss.channel.title,
-                    url: rss.url
+                hosts: [{
+                    name: "https://www.rss.com",
+                    feeds: [{
+                        lastRead: { guid: post0.guid, timestamp: Date.parse(post0.pubDate) },
+                        name: rss.textData.rss.channel.title,
+                        url: rss.url
+                    }]
                 }]
             }
         };

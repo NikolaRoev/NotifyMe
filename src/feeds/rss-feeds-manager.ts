@@ -1,6 +1,7 @@
 import { BaseFeedsManager, FeedSource, type Post } from "./base-feeds-manager";
 import { XMLParser } from "fast-xml-parser";
 import { wait } from "../../utility/wait";
+import { warn } from "../log";
 import { z } from "zod";
 
 
@@ -34,8 +35,13 @@ export type RSSFeed = {
     lastRead?: { guid: string, timestamp: number }
 }
 
-export type RSSFeeds = {
+export type RSSHost = {
+    name: string,
     feeds: RSSFeed[]
+}
+
+export type RSSFeeds = {
+    hosts: RSSHost[]
 }
 
 
@@ -43,14 +49,10 @@ export class RSSFeedsManager implements BaseFeedsManager {
     private static TIME_BETWEEN_REQUESTS = 1000;
 
     getEmptyFeeds(): RSSFeeds {
-        return { feeds: [] };
+        return { hosts: [] };
     }
 
     async addFeed(feeds: RSSFeeds, feedData: RSSFeedData): Promise<void> {
-        if (feeds.feeds.some((value) => value.url === feedData.url)) {
-            throw new Error(`Feed '${feedData.url}' already added`);
-        }
-
         const data = await this.request(feedData.url);
         const items = data.rss.channel.item;
 
@@ -58,28 +60,67 @@ export class RSSFeedsManager implements BaseFeedsManager {
         if (items?.[0]) {
             rssFeed.lastRead = { guid: items[0].guid, timestamp: items[0].pubDate };
         }
-        feeds.feeds.push(rssFeed);
+
+        const hostName = new URL(feedData.url).origin;
+
+
+        const hostObj = feeds.hosts.find((host) => host.name === hostName);
+        if (hostObj) {
+            if (hostObj.feeds.some((feed) => feed.url === feedData.url)) {
+                throw new Error(`Feed '${feedData.url}' from '${hostObj.name}' already added`);
+            }
+            hostObj.feeds.push(rssFeed);
+        }
+        else {
+            feeds.hosts.push({ name: hostName, feeds: [rssFeed]});
+        }
     }
 
     removeFeed(feeds: RSSFeeds, feedData: RSSFeedData): void {
-        const feedIndex = feeds.feeds.findIndex((value) => value.url === feedData.url);
-        
-        if (feedIndex === -1) {
-            throw new Error(`No feed '${feedData.url}'`);
-        }
+        const hostName = new URL(feedData.url).origin;
+        const hostIndex = feeds.hosts.findIndex((host) => host.name === hostName);
+        const hostObj = feeds.hosts[hostIndex];
+        if (hostObj?.feeds.some((feed) => feed.url === feedData.url)) {
+            hostObj.feeds = hostObj.feeds.filter((feed) => feed.url !== feedData.url);
 
-        feeds.feeds.splice(feedIndex, 1);
+            if (hostObj.feeds.length === 0) {
+                feeds.hosts.splice(hostIndex, 1);
+            }
+        }
+        else {
+            throw new Error(`No feed '${feedData.url}' from '${hostName}'`);
+        }
     }
 
     hasFeed(feeds: RSSFeeds, feedData: RSSFeedData): boolean {
-        return feeds.feeds.some((value) => value.url === feedData.url);
+        if (!URL.canParse(feedData.url)) {
+            return false;
+        }
+
+        const hostName = new URL(feedData.url).origin;
+        const hostObj = feeds.hosts.find((host) => host.name === hostName);
+        return !!(hostObj?.feeds.some((feed) => feed.url === feedData.url));
     }
 
     async update(feeds: RSSFeeds): Promise<Post[]> {
+        const promises: Promise<Post[]>[] = [];
+        for (const host of feeds.hosts) {
+            promises.push(this.handleHost(host));
+        }
+
+        return (await Promise.all(promises)).flat();
+    }
+
+    private async handleHost(host: RSSHost): Promise<Post[]> {
         const newPosts: Post[] = [];
 
-        for (const feed of feeds.feeds) {
-            newPosts.push(...await this.getPosts(feed));
+        for (const feed of host.feeds) {
+            try {
+                newPosts.push(...await this.getPosts(feed));
+            }
+            catch (reason) {
+                await warn(`Failed to get feed '${feed.name}' from '${host.name}': ${reason}.`);
+            }
         }
 
         return newPosts;

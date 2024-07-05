@@ -49,6 +49,19 @@ extensionTest.describe("Feeds", () => {
             return true;
         });
     });
+
+    extensionTest("Can filter feeds", async ({ page, extensionId, rss }) => {
+        rss.textData.rss.channel.item.push(post0);
+        await addRssFeed(page, extensionId, rss.url, rss.textData.rss.channel.title);
+        const searchInput = page.locator("[name='feeds-search-input']");
+        await searchInput.fill("TEST");
+
+        await expect(page.getByText(rss.textData.rss.channel.title)).toHaveCount(1);
+
+        await searchInput.fill("NOT TEST");
+
+        await expect(page.getByText(rss.textData.rss.channel.title)).toHaveCount(0);
+    });
 });
 
 

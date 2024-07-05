@@ -10,7 +10,7 @@ import type { Result } from "../../../utility/result";
 
 
 function useRSSFeeds() {
-    const [rssFeeds, setRSSFeeds] = useState<RSSFeeds>({feeds: []});
+    const [rssFeeds, setRSSFeeds] = useState<RSSFeeds>({hosts: []});
   
     const getRSSFeeds = () => {
         const message: Message = { type: "GetFeeds", source: FeedSource.RSS };
