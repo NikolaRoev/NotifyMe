@@ -2,13 +2,7 @@ import clsx from "clsx";
 
 
 
-type GeneralButtonProps = {
-    children: string,
-    className?: string,
-    onClick?: React.MouseEventHandler
-}
-
-export default function GeneralButton({ children, className, onClick }: GeneralButtonProps) {
+export default function GeneralButton({ children, className, ...props }: React.ComponentPropsWithoutRef<"button">) {
     return (
         <button
             className={clsx(
@@ -16,7 +10,7 @@ export default function GeneralButton({ children, className, onClick }: GeneralB
                 "hover:bg-neutral-300 active:bg-neutral-400",
                 className
             )}
-            onClick={onClick}
+            {...props}
         >{children}</button>
     );
 }
