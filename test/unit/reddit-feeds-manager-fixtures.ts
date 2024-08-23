@@ -1,5 +1,5 @@
 import { type Mock, test, vi } from "vitest";
-import { type RedditFeeds, RedditFeedsManager } from "../../src/feeds/reddit-feeds-manager";
+import { type RedditFeeds, RedditFeedsManager } from "../../src/backend/feeds/reddit-feeds-manager";
 
 
 

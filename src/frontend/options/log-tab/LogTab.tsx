@@ -1,6 +1,6 @@
-import { type LogMessage, Severity } from "../../log";
+import { type LogMessage, Severity } from "../../../backend/log";
 import { useEffect, useState } from "react";
-import type { Message } from "../../message";
+import type { Message } from "../../../backend/message";
 import { Virtuoso } from "react-virtuoso";
 import clsx from "clsx";
 import { formatISO9075 } from "date-fns";

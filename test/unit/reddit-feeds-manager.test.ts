@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, suite, vi } from "vitest";
 import { submission0, submission1, submission2 } from "../data/reddit";
-import { FeedSource } from "../../src/feeds/base-feeds-manager";
+import { FeedSource } from "../../src/backend/feeds/base-feeds-manager";
 import { redditTest } from "./reddit-feeds-manager-fixtures";
 
 
@@ -221,7 +221,7 @@ suite("Update", () => {
         expect(global.fetch).toHaveBeenCalledTimes(2);
     });
 
-    redditTest("Will wait for remaining requests", async ({ manager, feeds, reddit }) => {
+    redditTest("Will wait for remaining requests", { timeout: 2500 }, async ({ manager, feeds, reddit }) => {
         vi.useRealTimers();
         reddit.jsonData.data.children.push(submission0);
         const waitTime = 2000;
@@ -237,7 +237,7 @@ suite("Update", () => {
         const elapsed = end - start;
         expect(elapsed).toBeGreaterThan(waitTime * 0.90);
         expect(elapsed).toBeLessThan(waitTime * 1.10);
-    }, { timeout: 2500 });
+    });
 
     redditTest("Will not request recursively if there are no posts", async ({ manager, feeds, reddit }) => {
         reddit.remainingRequests = 1;

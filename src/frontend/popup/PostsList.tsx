@@ -1,5 +1,5 @@
-import type { Message } from "../../message";
-import type { Post } from "../../feeds/base-feeds-manager";
+import type { Message } from "../../backend/message";
+import type { Post } from "../../backend/feeds/base-feeds-manager";
 import clsx from "clsx";
 import { formatDistanceToNowStrict } from "date-fns";
 

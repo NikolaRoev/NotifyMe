@@ -1,5 +1,5 @@
 import { type Mock, test, vi } from "vitest";
-import { type RSSFeeds, RSSFeedsManager } from "../../src/feeds/rss-feeds-manager";
+import { type RSSFeeds, RSSFeedsManager } from "../../src/backend/feeds/rss-feeds-manager";
 import { type RSSTextData, getDefaultTextData } from "../data/rss";
 import { XMLBuilder } from "fast-xml-parser";
 

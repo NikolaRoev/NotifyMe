@@ -1,8 +1,9 @@
 import * as Storage from "./storage";
 import { BaseFeedsManager, type FeedData, FeedSource, type Feeds, type Post } from "./feeds/base-feeds-manager";
-import { Err, Ok, type Result } from "../utility/result";
+import { Err, Ok, type Result } from "../../utility/result";
 import { type Settings, defaultSettings } from "./settings";
 import { error, getLog, info, warn } from "./log";
+import { KemonoFeedsManager } from "./feeds/kemono-feeds-manager";
 import type { Message } from "./message";
 import { RSSFeedsManager } from "./feeds/rss-feeds-manager";
 import { RedditFeedsManager } from "./feeds/reddit-feeds-manager";
@@ -13,7 +14,8 @@ import { formatDistanceToNowStrict } from "date-fns";
 
 const feedsManagers: { [Key in FeedSource]: BaseFeedsManager } = {
     [FeedSource.Reddit]: new RedditFeedsManager(),
-    [FeedSource.RSS]: new RSSFeedsManager()
+    [FeedSource.RSS]: new RSSFeedsManager(),
+    [FeedSource.Kemono]: new KemonoFeedsManager()
 };
 
 

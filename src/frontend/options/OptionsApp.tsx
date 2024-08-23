@@ -1,8 +1,9 @@
-import { Tab, Tabs } from "./Tabs";
-import LogTab from "./LogTab";
-import RSSTab from "./RSSTab";
-import RedditTab from "./RedditTab";
-import SettingsTab from "./SettingsTab";
+import { Tab, Tabs } from "../components/Tabs";
+import KemonoTab from "./kemono-tab/KemonoTab";
+import LogTab from "./log-tab/LogTab";
+import RSSTab from "./rss-tab/RSSTab";
+import RedditTab from "./reddit-tab/RedditTab";
+import SettingsTab from "./settings-tab/SettingsTab";
 
 
 
@@ -16,6 +17,7 @@ export default function OptionsApp() {
             <Tabs>
                 <Tab title="Reddit"><RedditTab /></Tab>
                 <Tab title="RSS"><RSSTab /></Tab>
+                <Tab title="Kemono"><KemonoTab /></Tab>
                 <Tab title="Settings"><SettingsTab /></Tab>
                 <Tab title="Log"><LogTab /></Tab>
             </Tabs>

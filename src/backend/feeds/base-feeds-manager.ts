@@ -1,3 +1,4 @@
+import type { KemonoFeedData, KemonoFeeds } from "./kemono-feeds-manager";
 import type { RSSFeedData, RSSFeeds } from "./rss-feeds-manager";
 import type { RedditFeedData, RedditFeeds } from "./reddit-feeds-manager";
 
@@ -5,7 +6,8 @@ import type { RedditFeedData, RedditFeeds } from "./reddit-feeds-manager";
 
 export enum FeedSource {
     Reddit = "Reddit",
-    RSS = "RSS"
+    RSS = "RSS",
+    Kemono = "Kemono"
 }
 
 export type Post = {
@@ -18,11 +20,13 @@ export type Post = {
 
 export type FeedData =
     RedditFeedData |
-    RSSFeedData
+    RSSFeedData |
+    KemonoFeedData
 
 export type Feeds =
     RedditFeeds |
-    RSSFeeds
+    RSSFeeds |
+    KemonoFeeds
 
 
 export abstract class BaseFeedsManager {

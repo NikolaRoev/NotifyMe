@@ -1,10 +1,10 @@
-import ConfirmButton from "./ConfirmButton";
-import { FeedSource } from "../../feeds/base-feeds-manager";
-import FeedsList from "./FeedsList";
+import ConfirmButton from "../../components/ConfirmButton";
+import { FeedSource } from "../../../backend/feeds/base-feeds-manager";
+import FeedsList from "../components/FeedsList";
 import { GroupedVirtuoso } from "react-virtuoso";
-import type { Message } from "../../message";
-import type { RedditFeeds } from "../../feeds/reddit-feeds-manager";
-import type { Result } from "../../../utility/result";
+import type { Message } from "../../../backend/message";
+import type { RedditFeeds } from "../../../backend/feeds/reddit-feeds-manager";
+import type { Result } from "../../../../utility/result";
 import clsx from "clsx";
 
 

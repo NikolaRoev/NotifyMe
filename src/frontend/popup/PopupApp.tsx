@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Message } from "../../message";
-import type { Post } from "../../feeds/base-feeds-manager";
+import type { Message } from "../../backend/message";
+import type { Post } from "../../backend/feeds/base-feeds-manager";
 import PostsList from "./PostsList";
 import ToolBar from "./ToolBar";
 

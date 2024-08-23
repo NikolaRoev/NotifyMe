@@ -21,6 +21,14 @@ type Fixtures = {
         url: string,
         status: number,
         textData: RSSTextData
+    },
+    kemono: {
+        status: number,
+        jsonData: {
+            id: string,
+            name: string,
+            updated: string
+        }
     }
 }
 
@@ -93,5 +101,25 @@ export const extensionTest = test.extend<Fixtures>({
         });
 
         await use(rss);
+    },
+    kemono: async ({ context }, use) => {
+        const kemono: Fixtures["kemono"] = {
+            status: 200,
+            jsonData: {
+                id: "",
+                name: "",
+                updated: ""
+            }
+        };
+
+        await context.route("https://kemono.su/**/*", async (route) => {
+            await route.fulfill({
+                contentType: "application/json",
+                status: kemono.status,
+                json: kemono.jsonData
+            });
+        });
+
+        await use(kemono);
     }
 });

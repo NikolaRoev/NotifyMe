@@ -1,5 +1,5 @@
 import { BaseFeedsManager, FeedSource, type Post } from "./base-feeds-manager";
-import { wait } from "../../utility/wait";
+import { wait } from "../../../utility/wait";
 import { z } from "zod";
 
 

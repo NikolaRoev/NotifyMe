@@ -1,16 +1,16 @@
 import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "react";
-import { FeedSource } from "../../feeds/base-feeds-manager";
-import GeneralButton from "./GeneralButton";
-import Input from "./Input";
-import type { Message } from "../../message";
-import type { RSSFeeds } from "../../feeds/rss-feeds-manager";
+import { FeedSource } from "../../../backend/feeds/base-feeds-manager";
+import GeneralButton from "../../components/GeneralButton";
+import Input from "../../components/Input";
+import type { Message } from "../../../backend/message";
+import type { RSSFeeds } from "../../../backend/feeds/rss-feeds-manager";
 import RSSFeedsList from "./RSSFeedsList";
-import type { Result } from "../../../utility/result";
+import type { Result } from "../../../../utility/result";
 
 
 
 function useRSSFeeds() {
-    const [rssFeeds, setRSSFeeds] = useState<RSSFeeds>({hosts: []});
+    const [rssFeeds, setRSSFeeds] = useState<RSSFeeds>({ hosts: [] });
   
     const getRSSFeeds = () => {
         const message: Message = { type: "GetFeeds", source: FeedSource.RSS };

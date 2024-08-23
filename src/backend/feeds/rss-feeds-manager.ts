@@ -1,6 +1,6 @@
 import { BaseFeedsManager, FeedSource, type Post } from "./base-feeds-manager";
 import { XMLParser } from "fast-xml-parser";
-import { wait } from "../../utility/wait";
+import { wait } from "../../../utility/wait";
 import { warn } from "../log";
 import { z } from "zod";
 

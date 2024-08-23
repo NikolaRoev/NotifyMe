@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, suite, vi } from "vitest";
 import { post0, post1, post2 } from "../data/rss";
-import { FeedSource } from "../../src/feeds/base-feeds-manager";
+import { FeedSource } from "../../src/backend/feeds/base-feeds-manager";
 import { rssTest } from "./rss-feeds-manager-fixtures";
 
 
@@ -10,7 +10,7 @@ beforeEach(() => {
     vi.runAllTimersAsync().catch((reason: unknown) => {
         console.error(`Failed to run timers: ${reason}.`);
     });
-    vi.mock("../../src/log", () => ({
+    vi.mock("../../src/backend/log", () => ({
         warn: (message: string) => { throw new Error(message); },
         error: (message: string) => { throw new Error(message); }
     }));

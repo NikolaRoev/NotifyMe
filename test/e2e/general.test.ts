@@ -1,6 +1,7 @@
-import { addRedditFeed, addRssFeed, setUpdatePeriod } from "./utility";
+import { addKemonoFeed, addRedditFeed, addRssFeed, setUpdatePeriod } from "./utility";
 import { post0, post1 } from "../data/rss";
-import { FeedSource } from "../../src/feeds/base-feeds-manager";
+import { FeedSource } from "../../src/backend/feeds/base-feeds-manager";
+import { creatorData0 } from "../data/kemono";
 import { expect } from "@playwright/test";
 import { extensionTest } from "./fixtures";
 import { manifest } from "../../manifest";
@@ -83,7 +84,7 @@ extensionTest.describe("Options", () => {
         expect(elapsed).toBeLessThan(3000 * 1.15);
     });
 
-    extensionTest("Can export feeds", async ({ page, extensionId, reddit, rss }) => {
+    extensionTest("Can export feeds", async ({ page, extensionId, reddit, rss, kemono }) => {
         const expected = {
             [FeedSource.Reddit]: {
                 remainingRequests: 1,
@@ -103,6 +104,14 @@ extensionTest.describe("Options", () => {
                         url: rss.url
                     }]
                 }]
+            },
+            [FeedSource.Kemono]: {
+                creators: [{
+                    service: creatorData0.service,
+                    id: creatorData0.id,
+                    name: creatorData0.name,
+                    lastUpdated: Date.parse(creatorData0.updated)
+                }]
             }
         };
 
@@ -117,8 +126,10 @@ extensionTest.describe("Options", () => {
 
         reddit.jsonData.data.children.push(submission0);
         rss.textData.rss.channel.item.push(post0);
+        kemono.jsonData = creatorData0;
         await addRedditFeed(page, extensionId, "testSubreddit", "testUser", true);
         await addRssFeed(page, extensionId, rss.url, rss.textData.rss.channel.title);
+        await addKemonoFeed(page, extensionId, creatorData0.service, kemono.jsonData.id, kemono.jsonData.name, true);
 
         const messagePromise = page.waitForEvent("console");
         await page.getByRole("tab", { name: "Settings" }).click();
@@ -148,6 +159,14 @@ extensionTest.describe("Options", () => {
                         url: rss.url
                     }]
                 }]
+            },
+            [FeedSource.Kemono]: {
+                creators: [{
+                    service: creatorData0.service,
+                    id: creatorData0.id,
+                    name: creatorData0.name,
+                    lastUpdated: Date.parse(creatorData0.updated)
+                }]
             }
         };
 
@@ -169,6 +188,9 @@ extensionTest.describe("Options", () => {
         
         await page.getByRole("tab", { name: "RSS" }).click();
         expect(await page.getByText(rss.textData.rss.channel.title).getAttribute("href")).toEqual(rss.url);
+
+        await page.getByRole("tab", { name: "Kemono" }).click();
+        await expect(page.getByText(creatorData0.name)).toBeVisible();
     });
 
     extensionTest("Info is correct", async ({ page, extensionId }) => {

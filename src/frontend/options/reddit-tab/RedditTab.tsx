@@ -1,16 +1,16 @@
 import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "react";
-import { FeedSource } from "../../feeds/base-feeds-manager";
-import GeneralButton from "./GeneralButton";
-import Input from "./Input";
-import type { Message } from "../../message";
-import type { RedditFeeds } from "../../feeds/reddit-feeds-manager";
+import { FeedSource } from "../../../backend/feeds/base-feeds-manager";
+import GeneralButton from "../../components/GeneralButton";
+import Input from "../../components/Input";
+import type { Message } from "../../../backend/message";
+import type { RedditFeeds } from "../../../backend/feeds/reddit-feeds-manager";
 import RedditFeedsList from "./RedditFeedsList";
-import type { Result } from "../../../utility/result";
+import type { Result } from "../../../../utility/result";
 
 
 
 function useRedditFeeds() {
-    const [redditFeeds, setRedditFeeds] = useState<RedditFeeds>({subreddits: []});
+    const [redditFeeds, setRedditFeeds] = useState<RedditFeeds>({ subreddits: [] });
   
     const getRedditFeeds = () => {
         const message: Message = { type: "GetFeeds", source: FeedSource.Reddit };
@@ -62,7 +62,7 @@ export default function RedditTab() {
         chrome.runtime.sendMessage(message).then((result: Result<boolean>) => {
             if (result.ok) {
                 getRedditFeeds();
-                setInputs({subreddit: "", user: ""});
+                setInputs({ subreddit: "", user: "" });
             }
             else {
                 alert(result.error);

@@ -26,6 +26,18 @@ export async function addRssFeed(page: Page, extensionId: string, url: string, t
     }
 }
 
+export async function addKemonoFeed(page: Page, extensionId: string, service: string, id: string, name: string, verify = false) {
+    await page.goto(`chrome-extension://${extensionId}/options.html`);
+    await page.getByRole("tab", { name: "Kemono" }).click();
+    await page.getByLabel("Service:").fill(service);
+    await page.getByLabel("Id:").fill(id);
+    await page.getByRole("button", { name: "Add" }).click();
+
+    if (verify) {
+        expect(await page.getByText(name).getAttribute("href")).toEqual(`https://kemono.su/${service}/user/${id}`);
+    }
+}
+
 export async function setUpdatePeriod(page: Page, extensionId: string, updatePeriod: number) {
     await page.goto(`chrome-extension://${extensionId}/options.html`);
     await page.getByRole("tab", { name: "Settings" }).click();

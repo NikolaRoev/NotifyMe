@@ -1,4 +1,4 @@
-import { type LogMessage, Severity, addLog } from "../../src/log";
+import { type LogMessage, Severity, addLog } from "../../src/backend/log";
 import { expect, suite, test } from "vitest";
 
 

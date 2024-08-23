@@ -1,4 +1,4 @@
-import { BaseFeedsManager, type Post } from "../../src/feeds/base-feeds-manager";
+import { BaseFeedsManager, type Post } from "../../src/backend/feeds/base-feeds-manager";
 import { expect, suite, test } from "vitest";
 
 

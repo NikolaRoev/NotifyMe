@@ -1,9 +1,9 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
-import { FeedSource, type Feeds } from "../../feeds/base-feeds-manager";
-import { type Settings, defaultSettings } from "../../settings";
-import GeneralButton from "./GeneralButton";
-import Input from "./Input";
-import type { Message } from "../../message";
+import { FeedSource, type Feeds } from "../../../backend/feeds/base-feeds-manager";
+import { type Settings, defaultSettings } from "../../../backend/settings";
+import GeneralButton from "../../components/GeneralButton";
+import Input from "../../components/Input";
+import type { Message } from "../../../backend/message";
 
 
 
@@ -11,7 +11,8 @@ function exportFeeds() {
     const createExportFile = async () => {
         const feeds = {
             [FeedSource.Reddit]: await chrome.runtime.sendMessage({ type: "GetFeeds", source: FeedSource.Reddit } as Message) as unknown,
-            [FeedSource.RSS]: await chrome.runtime.sendMessage({ type: "GetFeeds", source: FeedSource.RSS } as Message) as unknown
+            [FeedSource.RSS]: await chrome.runtime.sendMessage({ type: "GetFeeds", source: FeedSource.RSS } as Message) as unknown,
+            [FeedSource.Kemono]: await chrome.runtime.sendMessage({ type: "GetFeeds", source: FeedSource.Kemono } as Message) as unknown
         };
         const feedsString = JSON.stringify(feeds, undefined, 2);
     

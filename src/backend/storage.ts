@@ -1,4 +1,5 @@
 import { FeedSource, type Post } from "./feeds/base-feeds-manager";
+import type { KemonoFeeds } from "./feeds/kemono-feeds-manager";
 import type { LogMessage } from "./log";
 import type { RSSFeeds } from "./feeds/rss-feeds-manager";
 import type { RedditFeeds } from "./feeds/reddit-feeds-manager";
@@ -20,6 +21,7 @@ type Type<T> =
     T extends GenericKey.UnreadPosts ? Post[] :
     T extends FeedSource.Reddit ? RedditFeeds :
     T extends FeedSource.RSS ? RSSFeeds :
+    T extends FeedSource.Kemono ? KemonoFeeds :
     never;
 
 

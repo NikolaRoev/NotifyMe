@@ -1,10 +1,10 @@
-import type { RSSFeed, RSSFeeds } from "../../feeds/rss-feeds-manager";
-import ConfirmButton from "./ConfirmButton";
-import { FeedSource } from "../../feeds/base-feeds-manager";
-import FeedsList from "./FeedsList";
+import type { RSSFeed, RSSFeeds } from "../../../backend/feeds/rss-feeds-manager";
+import ConfirmButton from "../../components/ConfirmButton";
+import { FeedSource } from "../../../backend/feeds/base-feeds-manager";
+import FeedsList from "../components/FeedsList";
 import { GroupedVirtuoso } from "react-virtuoso";
-import type { Message } from "../../message";
-import type { Result } from "../../../utility/result";
+import type { Message } from "../../../backend/message";
+import type { Result } from "../../../../utility/result";
 import clsx from "clsx";
 
 
