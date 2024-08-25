@@ -3,6 +3,7 @@ import { addKemonoFeed } from "./utility";
 import { expect } from "@playwright/test";
 import { extensionTest } from "./fixtures";
 import { formatDistanceToNowStrict } from "date-fns";
+import { wait } from "../../utility/wait";
 
 
 
@@ -73,12 +74,11 @@ extensionTest.describe("Posts", () => {
     extensionTest.beforeEach(async ({ context, page, extensionId, kemono }) => {
         kemono.jsonData = creatorData0;
         await addKemonoFeed(page, extensionId, creatorData0.service, kemono.jsonData.id, kemono.jsonData.name, true);
-
         kemono.jsonData = creatorData0Updated;
+        await wait(1000);
+
         await context.waitForEvent("response");
         await page.goto(`chrome-extension://${extensionId}/popup.html`);
-        await page.waitForLoadState();
-        await page.reload();
     });
 
     extensionTest("Can get new post", async ({ page }) => {
