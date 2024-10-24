@@ -158,7 +158,7 @@ export class RSSFeedsManager implements BaseFeedsManager {
     private async request(url: string): Promise<RSSFeedObject> {
         await wait(RSSFeedsManager.TIME_BETWEEN_REQUESTS);
         
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: "no-cache" });
         const text = await response.text();
         if (!response.ok) {
             throw new Error(`[${response.status}] ${text}`);
