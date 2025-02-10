@@ -13,7 +13,7 @@
   "type": "module",
   "devDependencies": {
     "@octokit/rest": "^21.0.0",
-    "@playwright/test": "^1.44.1",
+    "@playwright/test": "^1.50.1",
     "@types/chrome": "^0.0.268",
     "@types/node": "^20.14.8",
     "@types/react": "^18.3.3",
