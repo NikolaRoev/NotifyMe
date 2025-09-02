@@ -5,7 +5,7 @@ import type { Manifest } from "./utility/make-manifest-plugin";
 export const manifest: Manifest = {
     "manifest_version": 3,
     "name": "NotifyMe",
-    "version": "1.1.1",
+    "version": "1.1.2",
 
     "action": {
         "default_popup": "popup.html"

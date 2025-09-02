@@ -100,7 +100,10 @@ export class KemonoFeedsManager implements BaseFeedsManager {
     private async request(service: string, id: string): Promise<CreatorJsonObject> {
         await wait(KemonoFeedsManager.TIME_BETWEEN_REQUESTS);
 
-        const response = await fetch(`https://kemono.su/api/v1/${service}/user/${id}/profile`, { cache: "no-cache" });
+        const response = await fetch(`https://kemono.su/api/v1/${service}/user/${id}/profile`, {
+            cache: "no-cache",
+            headers: { Accept: "text/css" }
+        });
         const json: unknown = await response.json();
 
         if (!response.ok) {
