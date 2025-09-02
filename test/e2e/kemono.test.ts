@@ -17,7 +17,7 @@ extensionTest.describe("Feeds", () => {
     });
 
     extensionTest("Can catch failed fetch when adding feed", async ({ context, page, extensionId }) => {
-        await context.route("https://kemono.su/api/v1/**/*", (route) => route.abort());
+        await context.route("https://kemono.cr/api/v1/**/*", (route) => route.abort());
         await addKemonoFeed(page, extensionId, "patreon", "id", "name");
         
         await page.waitForEvent("dialog", async (dialog) => {
@@ -28,7 +28,7 @@ extensionTest.describe("Feeds", () => {
     });
 
     extensionTest("Can catch failed request when adding feed", async ({ context, page, extensionId }) => {
-        await context.route("https://kemono.su/api/v1/**/*", async (route) => {
+        await context.route("https://kemono.cr/api/v1/**/*", async (route) => {
             await route.fulfill({ status: 404, json: { message: "Not Found", error: 404 } });
         });
         await addKemonoFeed(page, extensionId, "patreon", "id", "name");
@@ -41,7 +41,7 @@ extensionTest.describe("Feeds", () => {
     });
 
     extensionTest("Can catch unexpected response JSON when adding feed", async ({ context, page, extensionId }) => {
-        await context.route("https://kemono.su/api/v1/**/*", async (route) => {
+        await context.route("https://kemono.cr/api/v1/**/*", async (route) => {
             await route.fulfill({ json: { invalid: true } });
         });
         await addKemonoFeed(page, extensionId, "patreon", "id", "name");
@@ -88,8 +88,8 @@ extensionTest.describe("Posts", () => {
 
     extensionTest("Can open new post", async ({ page }) => {
         const newPostPagePromise = page.waitForRequest((request) => {
-            if (request.url().startsWith("https://kemono.su/")) {
-                expect(request.url()).toEqual(`https://kemono.su/${creatorData0.service}/user/${creatorData0.id}`);
+            if (request.url().startsWith("https://kemono.cr/")) {
+                expect(request.url()).toEqual(`https://kemono.cr/${creatorData0.service}/user/${creatorData0.id}`);
                 return false;
             }
             return true;

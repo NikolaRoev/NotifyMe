@@ -34,7 +34,7 @@ export async function addKemonoFeed(page: Page, extensionId: string, service: st
     await page.getByRole("button", { name: "Add" }).click();
 
     if (verify) {
-        expect(await page.getByText(name).getAttribute("href")).toEqual(`https://kemono.su/${service}/user/${id}`);
+        expect(await page.getByText(name).getAttribute("href")).toEqual(`https://kemono.cr/${service}/user/${id}`);
     }
 }
 

@@ -42,7 +42,7 @@ export default function KemonoFeedsList({ kemonoFeeds, getKemonoFeeds }: { kemon
                         <div className={clsx("flex", {"bg-neutral-100": index % 2})}>
                             <a
                                 className="grow p-[5px] text-[16px] flex items-center hover:underline"
-                                href={`https://kemono.su/${creator.service}/user/${creator.id}`}
+                                href={`https://kemono.cr/${creator.service}/user/${creator.id}`}
                                 target="_blank" rel="noreferrer"
                             >{creator.name}</a>
                             <ConfirmButton

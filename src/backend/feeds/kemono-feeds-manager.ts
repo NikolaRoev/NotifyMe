@@ -88,7 +88,7 @@ export class KemonoFeedsManager implements BaseFeedsManager {
             newPosts.push({
                 id: creator.id,
                 title: `${creator.name} has been updated`,
-                url: `https://kemono.su/${creator.service}/user/${creator.id}`,
+                url: `https://kemono.cr/${creator.service}/user/${creator.id}`,
                 source: creator.service,
                 created: updatedTimestamp
             });
@@ -100,7 +100,7 @@ export class KemonoFeedsManager implements BaseFeedsManager {
     private async request(service: string, id: string): Promise<CreatorJsonObject> {
         await wait(KemonoFeedsManager.TIME_BETWEEN_REQUESTS);
 
-        const response = await fetch(`https://kemono.su/api/v1/${service}/user/${id}/profile`, {
+        const response = await fetch(`https://kemono.cr/api/v1/${service}/user/${id}/profile`, {
             cache: "no-cache",
             headers: { Accept: "text/css" }
         });

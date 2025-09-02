@@ -112,7 +112,7 @@ export const extensionTest = test.extend<Fixtures>({
             }
         };
 
-        await context.route("https://kemono.su/**/*", async (route) => {
+        await context.route("https://kemono.cr/**/*", async (route) => {
             await route.fulfill({
                 contentType: "application/json",
                 status: kemono.status,

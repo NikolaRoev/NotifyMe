@@ -113,7 +113,7 @@ suite("Update", () => {
             id: creatorData0Updated.id,
             source: creatorData0Updated.service,
             title: `${creatorData0Updated.name} has been updated`,
-            url: `https://kemono.su/${creatorData0Updated.service}/user/${creatorData0Updated.id}`
+            url: `https://kemono.cr/${creatorData0Updated.service}/user/${creatorData0Updated.id}`
         }]);
         expect(feeds.creators[0]?.lastUpdated).toEqual(Date.parse(creatorData0Updated.updated));
     });
